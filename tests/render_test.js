@@ -202,10 +202,10 @@ ok(vrep.checked === Bank.items.length, "validator checked every objective item (
 console.log("\n[R7] Practice-set flow — launch, score, and move to the next set");
 Store.reset();
 Store.get().profile.onboarded = true;
-ok(PracticeSets.catalog("reading").length === 20, "the catalogue offers 20 reading sets");
+ok(PracticeSets.catalog("reading").length === 30, "the catalogue offers 30 reading sets");
 const catHTML0 = render(() => Views.sets(), "practice sets catalogue");
-ok(/data-act="open-set"/.test(catHTML0) && /Start set 1/.test(catHTML0), "every set card carries its own start button");
-ok(/Set 20/.test(catHTML0), "set 20 is listed");
+ok(/data-act="open-set"/.test(catHTML0) && /<span class="badge">Set 1<\/span>/.test(catHTML0) && /Start practice/.test(catHTML0), "every set card shows its number at the top and carries its own start button");
+ok(/<span class="badge">Set 30<\/span>/.test(catHTML0), "set 30 is listed");
 PracticeSets.launch("RS-2");
 ok(App.test && App.test.setKey === "RS-2" && App.test.items.length >= 10, "launching a set loads its fixed questions (" + (App.test ? App.test.items.length : 0) + ")");
 App.answers = {}; App.flags = {}; App.qIndex = 0; App.route = "runner";
@@ -214,11 +214,11 @@ App.test.items.forEach((it, i) => { App.answers[it.id] = i % 4 === 0 ? "definite
 App.submitTest();
 ok(Store.get().attempts.some(a => a.setKey === "RS-2"), "submitting a set logs an attempt tagged with the set key");
 const setResHTML = render(() => Views.result(), "result page for a practice set");
-ok(/Practice set RS-2/.test(setResHTML) && /Next set/.test(setResHTML), "result page shows the set banner and a next-set button");
+ok(/Practice set 2/.test(setResHTML) && /Set number 2/.test(setResHTML) && /Next set/.test(setResHTML), "result page shows the numbered set banner and a next-set button");
 const setStats = PracticeSets.stats("RS-2");
 ok(setStats.attempts === 1 && setStats.best != null, "the set now has a recorded score (best " + setStats.best + ")");
 const catHTML1 = render(() => Views.sets(), "catalogue after a scored set");
-ok(/Best/.test(catHTML1) && /Retake set 2/.test(catHTML1), "the catalogue shows the score and offers a retake");
+ok(/Best/.test(catHTML1) && /<span class="badge">Set 2<\/span>/.test(catHTML1) && /Retake practice/.test(catHTML1), "the catalogue shows the set number, score and retake action");
 ok(PracticeSets.nextKey("RS-2") === "RS-3", "next-set moves to the following set in the same skill");
 
 console.log("\n" + "=".repeat(58));

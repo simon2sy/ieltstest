@@ -265,8 +265,9 @@ function setBannerHTML(setKey, extra) {
   extra = extra || {};
   var d = PracticeSets.descriptor(setKey);
   var s = PracticeSets.stats(setKey);
-  return '<div class="card tight" style="margin-bottom:16px;border-color:var(--brand)"><div class="row" style="justify-content:space-between"><div><div class="b">' + esc(d ? d.title : "Practice set") + (extra.label ? " · " + esc(extra.label) : "") + '</div>' +
-    '<div class="small muted">Practice set ' + esc(setKey) + " · " + s.attempts + " attempt" + (s.attempts > 1 ? "s" : "") + (s.best != null ? " · best band " + s.best.toFixed(1) : "") + '</div></div>' +
+  var setNumber = d ? d.n : "";
+  return '<div class="card tight" style="margin-bottom:16px;border-color:var(--brand)"><div class="row" style="justify-content:space-between;align-items:flex-start"><div><div class="badge">Practice set ' + setNumber + '</div><div class="b" style="margin-top:6px">' + esc(d ? d.title : "Practice set") + (extra.label ? " · " + esc(extra.label) : "") + '</div>' +
+    '<div class="small muted">Set number ' + setNumber + " · " + s.attempts + " attempt" + (s.attempts > 1 ? "s" : "") + (s.best != null ? " · best band " + s.best.toFixed(1) : "") + '</div></div>' +
     '<div class="row tight">' + (extra.nextAct ? '<button class="btn sm primary" data-act="' + extra.nextAct + '">' + (extra.nextLabel || "Next") + '</button>' : "") +
     '<button class="btn sm" data-act="go" data-route="sets" data-skill="' + (d ? d.skill : "reading") + '">All practice sets</button></div></div></div>';
 }
@@ -301,13 +302,12 @@ function setCardHTML(d) {
       '<span class="small muted">' + s.attempts + " attempt" + (s.attempts > 1 ? "s" : "") + (s.lastRaw != null ? " · last " + s.lastRaw + "/" + s.lastOutOf : "") + "</span></div>"
     : '<div class="small muted" style="margin-top:8px">Not attempted yet</div>';
   return '<div class="card tight" style="display:flex;flex-direction:column">' +
-    '<div class="row" style="justify-content:space-between"><span class="badge">Set ' + d.n + '</span><span class="chip ' + (d.tone || "grey") + '">' + esc(d.skill) + "</span></div>" +
+    '<div class="row" style="justify-content:space-between;align-items:flex-start"><div><span class="badge">Set ' + d.n + '</span><div class="b" style="margin-top:6px">' + esc(d.skill) + " practice set</div></div><span class=\"chip " + (d.tone || "grey") + "\">" + esc(d.format) + "</span></div>" +
     '<div class="b" style="margin-top:8px">' + esc(d.subtitle || d.title) + "</div>" +
-    '<div class="small muted">' + esc(d.format) + "</div>" +
     (chips ? '<div class="pill-row" style="margin-top:6px">' + chips + "</div>" : "") +
     scoreLine +
     '<div style="flex:1"></div>' +
-    '<button class="btn ' + (s.attempts ? "" : "primary ") + 'sm block" style="margin-top:10px" data-act="open-set" data-key="' + d.key + '">' + (s.attempts ? "Retake set " + d.n : "Start set " + d.n) + "</button></div>";
+    '<button class="btn ' + (s.attempts ? "" : "primary ") + 'sm block" style="margin-top:10px" data-act="open-set" data-key="' + d.key + '">' + (s.attempts ? "Retake practice" : "Start practice") + "</button></div>";
 }
 Views.sets = function () {
   var skill = App.params.skill || App.setSkill || "reading";
