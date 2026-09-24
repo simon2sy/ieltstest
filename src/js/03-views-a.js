@@ -400,8 +400,11 @@ Views.runner = function () {
       '<div class="row" style="margin-top:10px"><button class="btn sm" data-act="toggle-transcript-pre">' + (App.showTranscript ? "Hide transcript" : "Reveal transcript (practice mode)") + "</button></div>" +
       (App.showTranscript ? '<div style="margin-top:10px">' + ctx.transcript.map(function (l) { return '<div class="transcript-line"><div class="who">' + esc(l.sp) + "</div><div>" + esc(l.line) + "</div></div>"; }).join("") + "</div>" : "") + "</div>";
   }
+  var pageStart = Math.floor(App.qIndex / 5) * 5;
+  var pageItems = test.items.slice(pageStart, pageStart + 5);
   var grouped = "", lastCtx = null;
-  test.items.forEach(function (it, i) {
+  pageItems.forEach(function (it) {
+    var i = test.items.indexOf(it);
     if (it.ctxId !== lastCtx) {
       var c = it.ctxType === "passage" ? "Passage: " + it.ctx.title : "Section " + it.ctx.number + ": " + it.ctx.context;
       grouped += '<div class="upper" style="margin:14px 0 6px">' + esc(c) + "</div>";
@@ -409,12 +412,12 @@ Views.runner = function () {
     }
     grouped += common.qcard(it, i);
   });
-  var grid = '<div class="card tight"><div class="row" style="justify-content:space-between"><b class="small">Question navigator</b><span class="small muted">green = answered</span></div>' +
+  var grid = '<div class="card tight"><div class="row" style="justify-content:space-between"><b class="small">Questions ' + (pageStart + 1) + "–" + Math.min(pageStart + 5, test.items.length) + ' of ' + test.items.length + '</b><span class="small muted">green = answered</span></div>' +
     '<div class="qgrid" style="margin-top:8px">' + test.items.map(function (it, i) {
       var done = String(App.answers[it.id] || "").trim();
       return '<button class="' + (done ? "done " : "") + (App.flags[it.id] ? "flag " : "") + (App.qIndex === i ? "cur" : "") + '" data-act="jump" data-i="' + i + '">' + it.number + "</button>";
     }).join("") + "</div>" +
-    '<div class="row" style="margin-top:10px"><button class="btn sm" data-act="prev-q">← Previous</button><button class="btn sm" data-act="next-q">Next →</button>' +
+    '<div class="row" style="margin-top:10px"><button class="btn sm" data-act="prev-page"' + (pageStart === 0 ? " disabled" : "") + '>← Previous 5</button><button class="btn sm" data-act="next-page"' + (pageStart + 5 >= test.items.length ? " disabled" : "") + '>Next 5 →</button>' +
     (ctxType === "passage" ? '<button class="btn sm" data-act="scroll-reader">↑ Passage</button>' : "") + "</div>" +
     '<div class="small muted kbd-hint" style="margin-top:8px">Keyboard: <span class="kbd">←</span> <span class="kbd">→</span> move · <span class="kbd">F</span> flag · <span class="kbd">Ctrl</span>+<span class="kbd">Enter</span> review</div></div>';
   /* On phones the passage pane and the questions pane become two tabs, so the

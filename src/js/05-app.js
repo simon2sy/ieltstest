@@ -185,6 +185,8 @@ var ACTIONS = {
 
   /* ---- runner ---- */
   "jump": function (el) { App.qIndex = parseInt(el.dataset.i, 10); App.pane = "questions"; App._scrollTo = true; App.replaceRunner(); },
+  "prev-page": function () { App.qIndex = Math.max(0, Math.floor(App.qIndex / 5) * 5 - 5); App.pane = "questions"; App._scrollTo = true; App.replaceRunner(); },
+  "next-page": function () { App.qIndex = Math.min(App.test.items.length - 1, Math.floor(App.qIndex / 5) * 5 + 5); App.pane = "questions"; App._scrollTo = true; App.replaceRunner(); },
   "prev-q": function () { App.qIndex = Math.max(0, App.qIndex - 1); App._scrollTo = true; App.replaceRunner(); },
   "next-q": function () { App.qIndex = Math.min(App.test.items.length - 1, App.qIndex + 1); App._scrollTo = true; App.replaceRunner(); },
   "flag": function (el) {

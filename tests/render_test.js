@@ -97,7 +97,7 @@ App.answers = {}; App.flags = {}; App.qIndex = 0;
 App.timer = { id: null, start: Date.now(), elapsed: 1200, duration: test.durationSec, paused: false };
 const runnerHTML = render(() => Views.runner(), "runner with reading passage pane");
 ok(/class="passage"/.test(runnerHTML), "passage text pane present in runner");
-ok(/Question navigator/.test(runnerHTML), "question navigator grid present");
+ok(/Questions 1–5 of/.test(runnerHTML) && /Next 5/.test(runnerHTML), "runner shows five questions per page with next-page control");
 App.qIndex = test.items.findIndex(i => i.skill === "listening");
 const runnerL = render(() => Views.runner(), "runner with listening section pane (audio controls)");
 ok(/Play section/.test(runnerL), "audio playback controls rendered for listening sections");

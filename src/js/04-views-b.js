@@ -110,6 +110,21 @@ Views.writing = function () {
     setsBlockHTML("writing");
 };
 
+function taskVisualHTML(t) {
+  if (!t || t.task !== 1 || t.module !== "academic") return "";
+  var common = 'class="writing-visual" role="img" aria-label="' + esc(t.title) + '"';
+  var frame = '<div class="writing-visual-frame"><div class="writing-visual-title">' + esc(t.visualType) + '</div>';
+  var close = '</div></div>';
+  if (t.id === "W-A1-LINE-1") return frame + '<svg ' + common + ' viewBox="0 0 720 330" aria-hidden="true"><rect width="720" height="330" fill="#fff"/><g stroke="#b9c4d8" stroke-width="1"><path d="M70 35H680M70 105H680M70 175H680M70 245H680"/></g><g fill="#33415c" font-size="14"><text x="18" y="40">70%</text><text x="18" y="110">50%</text><text x="25" y="180">30%</text><text x="25" y="250">10%</text><text x="70" y="285">2005</text><text x="260" y="285">2010</text><text x="450" y="285">2015</text><text x="640" y="285">2020</text></g><g fill="none" stroke-width="4"><polyline points="70,108 260,71 450,50 680,42" stroke="#2f4be0"/><polyline points="70,181 260,126 450,115 680,112" stroke="#12a150"/><polyline points="70,206 260,203 450,206 680,201" stroke="#d98a00"/><polyline points="70,262 260,252 450,236 680,225" stroke="#d7446b"/></g><g fill="#2f4be0"><circle cx="70" cy="108" r="5"/><circle cx="260" cy="71" r="5"/><circle cx="450" cy="50" r="5"/><circle cx="680" cy="42" r="5"/></g><g fill="#33415c" font-size="13"><text x="500" y="25" fill="#2f4be0">Germany</text><text x="500" y="45" fill="#12a150">United Kingdom</text><text x="500" y="65" fill="#d98a00">Japan</text><text x="500" y="85" fill="#d7446b">Brazil</text></g></svg>' + close;
+  if (t.id === "W-A1-PIE-1") return frame + '<div class="writing-pies"><div><div class="pie" style="background:conic-gradient(#2f4be0 0 54%,#12a150 54% 76%,#d98a00 76% 93%,#d7446b 93% 100%)"></div><b>2005</b><small>Heating 54% · Water heating 22%<br>Lighting &amp; appliances 17% · Cooking 7%</small></div><div><div class="pie" style="background:conic-gradient(#2f4be0 0 38%,#12a150 38% 62%,#d98a00 62% 93%,#d7446b 93% 100%)"></div><b>2025</b><small>Heating 38% · Water heating 24%<br>Lighting &amp; appliances 31% · Cooking 7%</small></div></div>' + close;
+  if (t.id === "W-A1-BAR-1") return frame + '<svg ' + common + ' viewBox="0 0 720 330" aria-hidden="true"><rect width="720" height="330" fill="#fff"/><g fill="#dbe3f2"><rect x="80" y="80" width="55" height="170"/><rect x="230" y="120" width="55" height="130"/><rect x="380" y="135" width="55" height="115"/><rect x="530" y="145" width="55" height="105"/></g><g fill="#2f4be0"><rect x="150" y="115" width="55" height="135"/><rect x="300" y="145" width="55" height="105"/><rect x="450" y="150" width="55" height="100"/><rect x="600" y="145" width="55" height="105"/></g><g stroke="#b9c4d8"><path d="M65 250H690M65 40V250"/></g><g fill="#33415c" font-size="14"><text x="95" y="275">Bathroom</text><text x="250" y="275">Toilet</text><text x="405" y="275">Kitchen</text><text x="550" y="275">Garden</text><text x="155" y="25" fill="#9aa9c3">Litalia</text><text x="280" y="25" fill="#9aa9c3">Namoor</text><text x="405" y="25" fill="#9aa9c3">Sandria</text></g><g fill="#33415c" font-size="12"><text x="88" y="72">42/33/28</text><text x="238" y="112">24/22/26</text><text x="388" y="127">18/15/17</text><text x="538" y="137">16/30/29</text></g></svg>' + close;
+  if (t.id === "W-A1-MULTI-1") return frame + '<div class="visual-split"><div><h4>Commuters (%)</h4><table class="tbl"><tr><th>Method</th><th>2010</th><th>2025</th></tr><tr><td>Car</td><td>58%</td><td>41%</td></tr><tr><td>Bus</td><td>22%</td><td>27%</td></tr><tr><td>Train</td><td>9%</td><td>18%</td></tr><tr><td>Bicycle</td><td>11%</td><td>14%</td></tr></table></div><div><h4>Average journey (minutes)</h4><table class="tbl"><tr><th>Method</th><th>2010</th><th>2025</th></tr><tr><td>Car</td><td>31</td><td>38</td></tr><tr><td>Bus</td><td>42</td><td>39</td></tr><tr><td>Train</td><td>27</td><td>29</td></tr><tr><td>Bicycle</td><td>24</td><td>23</td></tr></table></div></div>' + close;
+  if (t.id === "W-A1-TABLE-1") return frame + '<table class="tbl visual-table"><tr><th>City</th><th>Journeys 2010</th><th>Journeys 2024</th><th>Rail 2010</th><th>Rail 2024</th></tr><tr><td>Harburg</td><td>320m</td><td>410m</td><td>22%</td><td>41%</td></tr><tr><td>Montela</td><td>780m</td><td>690m</td><td>58%</td><td>61%</td></tr><tr><td>Riverton</td><td>145m</td><td>260m</td><td>12%</td><td>34%</td></tr><tr><td>Okawa</td><td>640m</td><td>1,050m</td><td>71%</td><td>66%</td></tr><tr><td>Santurce</td><td>210m</td><td>205m</td><td>30%</td><td>29%</td></tr></table>' + close;
+  if (t.id === "W-A1-PROC-1") return frame + '<div class="process-flow">' + ["Seawater intake<br><small>screens debris</small>","Pre-treatment<br><small>particles settle</small>","High-pressure pumps<br><small>~60 bar</small>","Reverse osmosis<br><small>fresh water + brine</small>","Brine diffuser<br><small>returned to sea</small>","Post-treatment<br><small>minerals + disinfectant</small>","Storage tanks<br><small>water held</small>","Distribution<br><small>to households</small>"].map(function (x, i) { return '<div class="process-step"><b>' + (i + 1) + '</b><span>' + x + '</span></div>'; }).join('<i>→</i>') + '</div>' + close;
+  return frame + '<div class="map-compare"><div><h4>1995</h4><div class="map-box"><b>Cattle market</b><span>Warehouses</span><em>Playing fields</em></div></div><div class="map-arrow">→</div><div><h4>2025</h4><div class="map-box"><b>Housing + supermarket</b><span>Apartments + offices</span><em>Playing fields + sports centre</em></div></div></div>' + close;
+}
+
+
 Views.writingrun = function () {
   var w = App.writing;
   if (!w.task) return '<div class="card"><div class="empty">Choose a task first.<br><br><button class="btn primary" data-act="go" data-route="writing">Back to Writing</button></div></div>';
@@ -123,6 +138,10 @@ Views.writingrun = function () {
     '<button class="btn sm primary" data-act="evaluate-writing">Evaluate my writing</button>' +
     '<button class="btn sm" data-act="go" data-route="writing">Exit</button></div>' +
     (w.showSamples ? samplesHTML(t) : "") +
+     taskVisualHTML(t) +
+
+     band85TargetHTML(t) +
+
     '<div class="grid g2"><div class="card"><div class="card-h"><h3>Task</h3><span class="chip grey">' + esc(t.task === 1 ? "Report" : "Essay") + '</span><span class="chip">min ' + t.minWords + " words</span></div>" +
     '<div class="passage" style="font-family:var(--ff);font-size:15px">' + esc(t.prompt).replace(/\n/g, "<br>") + "</div>" +
     '<div class="hr"></div><div class="upper">Examiner notes</div>' +
@@ -138,6 +157,17 @@ Views.writingrun = function () {
     '<div class="note" style="margin-top:12px"><span class="ic">ⓘ</span><div>Write at least ' + t.minWords + " words. Answers under " + Math.round(t.minWords * 0.75) + " words are capped at Band 5 in Task Achievement regardless of quality.</div></div>" +
     "</div></div>";
 };
+
+function band85TargetHTML(t) {
+  if (!t || t.task !== 1 && t.task !== 2) return "";
+  var sample = t.samples && (t.samples.band9 || t.samples.band8 || t.samples.band7);
+  var answer = sample || "Use the model plan below as your Band 8.5 framework: paraphrase the task accurately; state a clear overview or position; develop each main point with a relevant example or explanation; organise the response into focused paragraphs; and use varied academic vocabulary with controlled grammar. Before submitting, check that every instruction in the prompt has been answered and that the response meets the required word count.";
+  var source = sample ? "Adapted from the strongest model response in this task’s bank." : "A complete model response is not stored for this task yet; use this framework to draft your own Band 8.5 response, then compare it with the examiner notes.";
+  return '<div class="card target-answer"><div class="card-h"><h3>Band 8.5 target answer</h3><span class="chip violet">Model guidance</span></div>' +
+    '<p class="small muted">' + esc(source) + '</p><div class="target-answer-text">' + esc(answer).replace(/\\n/g, "<br>") + '</div>' +
+    '<div class="note teal" style="margin-top:12px"><span class="ic">✓</span><div><b>Why this is strong:</b> it answers the task directly, prioritises the main patterns or arguments, uses clear paragraph structure, and combines precise vocabulary with varied sentence forms. Treat it as a guide, not an official examiner answer.</div></div></div>';
+}
+
 
 function samplesHTML(t) {
   if (!t.samples) return '<div class="note amber"><span class="ic">✎</span><div>Full four-band samples are provided for the line-graph Task 1, the process Task 1, the formal letter, the opinion essay and the discussion essay. For this task, use the model plan and examiner notes on the left.</div></div>';

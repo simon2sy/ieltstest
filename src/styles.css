@@ -346,6 +346,13 @@ label.tile.sel{border-color:var(--primary);background:var(--primary-l);box-shado
 
   /* writing editor */
   textarea{min-height:180px}
+  .writing-visual-frame{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:14px;margin-bottom:16px;box-shadow:var(--sh-1)}
+  .writing-visual-title{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--primary-d);margin-bottom:8px}
+  .writing-visual{display:block;width:100%;height:auto}
+  .writing-pies{display:flex;justify-content:center;gap:42px;flex-wrap:wrap;padding:12px}.writing-pies>div{text-align:center;max-width:210px}.pie{width:150px;height:150px;border-radius:50%;margin:0 auto 10px;border:5px solid #f7f9fd}.writing-pies small{display:block;color:var(--muted);line-height:1.5}
+  .visual-split{display:grid;grid-template-columns:1fr 1fr;gap:14px}.visual-split h4{text-align:center}.visual-table{font-size:13px}.process-flow{display:flex;align-items:stretch;gap:6px;overflow-x:auto;padding:8px 2px}.process-flow>i{font-style:normal;color:var(--primary);font-size:22px;align-self:center}.process-step{flex:0 0 115px;background:#f3f6ff;border:1px solid #dbe3ff;border-radius:10px;padding:9px;font-size:12px;text-align:center;line-height:1.35}.process-step b{display:grid;place-items:center;width:24px;height:24px;margin:0 auto 5px;border-radius:50%;background:var(--primary);color:#fff}.process-step small{color:var(--muted)}.map-compare{display:grid;grid-template-columns:1fr 28px 1fr;align-items:center;gap:8px}.map-arrow{text-align:center;color:var(--primary);font-size:26px}.map-box{height:190px;padding:12px;background:#eef8f3;border:2px solid #9ad6bc;border-radius:12px;position:relative}.map-box b,.map-box span,.map-box em{display:block;position:absolute;background:#fff;border:1px solid #b6d8c6;border-radius:7px;padding:6px;font-size:12px;font-style:normal}.map-box b{left:12px;top:12px}.map-box span{right:12px;top:70px}.map-box em{left:12px;bottom:12px}.map-compare h4{text-align:center}
+  .target-answer{border-color:#cdb8f0;background:linear-gradient(180deg,#fff,#fbf8ff)}.target-answer-text{white-space:normal;font-size:14px;line-height:1.75;color:var(--ink);background:#fff;border:1px solid #e4daf5;border-radius:10px;padding:14px;max-height:360px;overflow:auto}.target-answer .card-h{margin-bottom:8px}
+  @media(max-width:640px){.target-answer-text{font-size:13.5px;padding:11px}}
   .transcript-line{font-size:14px}
   .transcript-line .who{flex-basis:76px}
 
