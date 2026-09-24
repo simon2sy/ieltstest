@@ -50,7 +50,7 @@ var NAV = [
 function navHTML() {
   var p = Store.get().profile, b = Analytics.bands();
   var examDays = clamp(daysBetween(Date.now(), new Date(p.examDate + "T00:00:00")), 0, 999);
-  return '<div class="brand"><div class="logo">IE</div><div><b>IELTS Mastery</b><span>Practice Platform</span></div></div>' +
+  return '<div class="brand"><div class="logo">IE</div><div><b>IELTS Mastery</b><span>Practice Platform</span></div><button class="sidebar-close" data-act="close-menu" aria-label="Close navigation menu" title="Close menu">×</button></div>' +
     NAV.map(function (g) {
       return '<div class="nav-group">' + g.g + "</div><nav class=\"nav\">" + g.items.map(function (i) {
         return '<a href="#' + i[0] + '" data-act="go" data-route="' + i[0] + '" class="' + (App.route === i[0] ? "active" : "") + '"><span class="ic">' + i[2] + "</span>" + i[1] + "</a>";
@@ -72,7 +72,7 @@ function topbarHTML() {
   var titles = {
     dashboard: ["Dashboard", "Your current estimated bands, priorities and next actions"],
     practice: ["Practice", "Choose a mode: quick, skill, question-type, weakness, timed or untimed"],
-    sets: ["Practice Sets", "20 numbered, scored sets for every skill"],
+    sets: ["Practice Sets", "30 numbered, scored sets for every skill"],
     mock: ["Mock Tests", "Full exam simulation across all four skills"],
     reading: ["Reading", "Academic and General Training passages, 14 question types"],
     listening: ["Listening", "Four sections, 40 questions, transcripts with trap analysis"],
@@ -286,7 +286,7 @@ function setsBlockHTML(skill) {
   var chips = show.map(function (x) {
     return '<button class="btn sm" data-act="open-set" data-key="' + x.d.key + '">Set ' + x.d.n + (x.s.lastBand != null ? " · " + x.s.lastBand.toFixed(1) : "") + "</button>";
   }).join("");
-  return '<div class="card"><div class="card-h"><h3>Practice sets — 20 scored ' + esc(skill) + ' tests</h3><div class="spacer"></div><span class="chip ' + (sum.done === sum.total ? "green" : "grey") + '">' + sum.done + "/" + sum.total + " attempted" + (sum.best != null ? " · best " + sum.best.toFixed(1) : "") + '</span></div>' +
+  return   '<div class="card"><div class="card-h"><h3>Practice sets — ' + PracticeSets.PER_SKILL + ' scored ' + esc(skill) + ' tests</h3><div class="spacer"></div><span class="chip ' + (sum.done === sum.total ? "green" : "grey") + '">' + sum.done + "/" + sum.total + " attempted" + (sum.best != null ? " · best " + sum.best.toFixed(1) : "") + '</span></div>' +
     '<p class="small muted">' + PracticeSets.PER_SKILL + ' fixed sets, each scored and reproducible. Your best and latest score stays on every set, so you can practise more and watch the number move.</p>' +
     '<div class="pill-row">' + chips + '</div>' +
     '<div class="row" style="margin-top:10px"><button class="btn primary" data-act="go" data-route="sets" data-skill="' + skill + '">See all ' + PracticeSets.PER_SKILL + " sets</button></div></div>";
@@ -643,4 +643,3 @@ function transcriptReviewHTML(test, r) {
   out += '<div class="legend" style="margin-top:10px"><span><i style="background:#fff8dc;border:1px solid #f2e0a8"></i>answer location</span><span><i style="background:#fdf2f5;border:1px solid #f6d7e0"></i>distractor signal — a fact the speaker withdrew or corrected</span><span>Spelling and word limits are part of the mark — check your answer against the exact script wording.</span></div>';
   return out;
 }
-

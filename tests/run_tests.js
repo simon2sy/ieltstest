@@ -245,15 +245,15 @@ Store.get().seen = {};
 Store.save();
 
 /* ==================== 7. practice sets ==================== */
-console.log("\n[7] Practice sets — 20 per skill, reproducible and scored");
+console.log("\n[7] Practice sets — 30 per skill, reproducible and scored");
 Store.get().seen = {};
 ["reading", "listening", "writing", "speaking"].forEach(skill => {
   const cat = PracticeSets.catalog(skill);
-  ok(cat.length === 20, skill + " exposes 20 practice sets (" + cat.length + ")");
-  ok(new Set(cat.map(d => d.key)).size === 20, skill + " set keys are unique");
-  ok(cat.every(d => d.format && d.title && d.n >= 1 && d.n <= 20), skill + " every set has a title and a format line");
+  ok(cat.length === 30, skill + " exposes 30 practice sets (" + cat.length + ")");
+  ok(new Set(cat.map(d => d.key)).size === 30, skill + " set keys are unique");
+  ok(cat.every(d => d.format && d.title && d.n >= 1 && d.n <= 30), skill + " every set has a title and a format line");
 });
-ok(PracticeSets.PER_SKILL === 20, "the catalogue target is 20 sets per skill");
+ok(PracticeSets.PER_SKILL === 30, "the catalogue target is 30 sets per skill");
 
 ["reading", "listening"].forEach(skill => {
   const a = PracticeSets.build(skill, 3), b = PracticeSets.build(skill, 3);
@@ -272,7 +272,7 @@ const st = PracticeSets.stats(setTest.setKey);
 ok(st.attempts === 2 && st.best === 7, "set statistics read attempts tagged with the set key (best " + st.best + ", last " + st.lastBand + ")");
 ok(st.lastRaw === 13 && st.lastOutOf === 20, "set statistics keep the latest raw score");
 ok(PracticeSets.summary("reading").done >= 1, "skill summary counts the attempted set");
-ok(PracticeSets.nextKey("RS-20") === "RS-1", "next set wraps from 20 back to 1");
+ok(PracticeSets.nextKey("RS-30") === "RS-1", "next set wraps from 30 back to 1");
 ok(PracticeSets.nextKey("LS-4") === "LS-5", "next set advances within a skill");
 
 const wSets = PracticeSets.catalog("writing");

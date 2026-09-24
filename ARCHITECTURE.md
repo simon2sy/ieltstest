@@ -103,7 +103,7 @@ and exportable as JSON.
 ```
 /                        Dashboard — band cards, target gap, priority queue, recent activity
 /practice                Practice hub — 8 modes, band-target selector, duration selector
-/sets                    Practice Sets — 20 numbered, scored sets per skill (reading/listening/writing/speaking)
+/sets                    Practice Sets — 30 numbered, scored sets per skill (reading/listening/writing/speaking)
 /practice/run            Universal runner (reading, listening, quick, type, weakness, set modes)
 /mock                    Mock test hub — full simulation, module select, section-by-section or continuous
 /reading                 Reading home — Academic/GT, 14 question types, passage library, technique notes

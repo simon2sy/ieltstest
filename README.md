@@ -27,7 +27,7 @@ bank and the styles are inlined.
 | **Vocabulary** | 60 academic entries with collocations, IELTS example sentences and a spaced-repetition queue (4 grades, 1/3/7/14-day intervals) |
 | **Grammar** | 13 error categories, 48 items, plus an exercise generator driven by the errors found in *your* writing |
 | **Question types** | 13 reading/listening type labels in data (TFNG, headings, matching, summary, flow-chart, form, note, MCQ, short answer, …) |
-| **Practice sets** | 20 numbered sets per skill (80 in total). Reading and Listening sets are IELTS-format (whole passage / section groups, timed), Writing sets are single tasks plus full Task 1 + 2 papers, Speaking sets are full interviews plus cue-card and Part 3 drills. Each set is reproducible, individually selectable and scored, and keeps a best / latest result so you can retake it and compare |
+| **Practice sets** | 30 numbered sets per skill (120 in total). Reading and Listening sets are IELTS-format (whole passage / section groups, timed), Writing sets are single tasks plus full Task 1 + 2 papers, Speaking sets are full interviews plus cue-card and Part 3 drills. Each set is reproducible, individually selectable and scored, and keeps a best / latest result so you can retake it and compare |
 | **Analytics** | Band estimates per skill, accuracy by type and by difficulty, weak/strong types, priority ranking, timing, progress graph, per-question history |
 | **Study plan** | Generated from your data and exam date: one page per day with tasks, rotating the top three priorities |
 | **AI-style feedback** | Writing and Speaking rubrics with concrete corrections, weak→better rewrites and an explanation of *why* the better version is stronger |

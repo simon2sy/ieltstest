@@ -164,7 +164,8 @@ var ACTIONS = {
     App.launchTest(t);
   },
   "start-mock": function () {
-    var t = Bank.assemble({ mode: "full", title: "Full Mock Test" });
+    var mockNumber = Store.get().attempts.filter(function (a) { return a.mode === "full"; }).length + 1;
+    var t = Bank.assemble({ mode: "full", mockRound: mockNumber - 1, title: "Full Mock Test " + mockNumber });
     App.launchTest(t);
   },
   "start-mock-section": function (el) {
@@ -720,6 +721,9 @@ function boot() {
   window.addEventListener("hashchange", function () {
     var r = window.location.hash.replace("#", "");
     if (r && Views[r] && r !== App.route) App.go(r);
+  });
+  window.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") ACTIONS["close-menu"]();
   });
   var start = window.location.hash.replace("#", "");
   App.route = Views[start] ? start : "dashboard";

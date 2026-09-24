@@ -63,6 +63,7 @@ small,.small{font-size:12.5px}
 .spacer{flex:1}
 .content{padding:22px;max-width:1400px;width:100%;margin:0 auto}
 .menu-btn{display:none;background:var(--navy);color:#fff;border:0;border-radius:10px;padding:8px 11px;font-size:16px;cursor:pointer}
+.sidebar-close{display:none;margin-left:auto;width:34px;height:34px;border:1px solid rgba(255,255,255,.22);border-radius:9px;background:transparent;color:#fff;font-size:25px;line-height:1;cursor:pointer}
 
 /* ---------------- primitives ---------------- */
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--sh-1);padding:18px;margin-bottom:16px}
@@ -276,6 +277,7 @@ label.tile.sel{border-color:var(--primary);background:var(--primary-l);box-shado
 @media (max-width:1024px){
   .sidebar{position:fixed;left:0;top:0;bottom:0;z-index:100;transform:translateX(-100%);transition:transform .22s;box-shadow:var(--sh-3);height:auto}
   .sidebar.open{transform:none}
+  .sidebar-close{display:inline-grid;place-items:center}
   .menu-btn{display:inline-flex}
   .g3,.g2{grid-template-columns:1fr}
   .content{padding:16px}
@@ -4190,13 +4192,14 @@ var Bank = {
     var target = test.bandTarget;
     if (o.mode === "full") {
       var rItems = [], lItems = [];
+      var mockRound = Math.max(0, parseInt(o.mockRound || 0, 10));
       var acad = (window.BANK_READING[test.module] || []);
       var parts = test.module === "general" ? [1, 2] : [1, 2, 3];
       test.contexts = [];
       parts.forEach(function (part) {
         var pool = stale(acad.filter(function (p) { return p.part === part; }));
         if (!pool.length) pool = acad.filter(function (p) { return p.part === part; });
-        var p = pool.length ? sample(pool, 1)[0] : null;
+        var p = pool.length ? pool[(mockRound + part - 1) % pool.length] : null;
         if (p) {
           test.contexts.push(p);
           p.questions.forEach(function (q) {
@@ -4208,9 +4211,17 @@ var Bank = {
          questions the student has seen least often, so a second mock is fresh */
       var allSecs = window.BANK_LISTENING.sections || [];
       var lsecs = [], bestFresh = -1;
-      (window.BANK_LISTENING.tests || []).forEach(function (tst) {
+      var listeningTests = window.BANK_LISTENING.tests || [];
+      var preferredTest = o.mockRound != null && listeningTests.length ? listeningTests[mockRound % listeningTests.length] : null;
+      listeningTests.forEach(function (tst) {
         var secs = sortBy(allSecs.filter(function (s) { return s.testId === tst.id; }), function (s) { return s.number; });
         if (secs.length < 4) return;
+        if (preferredTest && tst.id === preferredTest.id) {
+          lsecs = secs;
+          bestFresh = Number.MAX_SAFE_INTEGER;
+          return;
+        }
+        if (lsecs.length && bestFresh === Number.MAX_SAFE_INTEGER) return;
         var fresh = 0;
         secs.forEach(function (s) { s.questions.forEach(function (q) { if (!seen[s.id + "-" + q.n]) fresh++; }); });
         if (fresh > bestFresh) { bestFresh = fresh; lsecs = secs; }
@@ -4226,7 +4237,7 @@ var Bank = {
         });
       });
       test.items = rItems.concat(lItems);
-      test.skill = "mixed"; test.title = "Full Mock Test"; test.timed = true;
+      test.skill = "mixed"; test.title = o.title || "Full Mock Test"; test.timed = true;
       test.durationSec = 60 * 60 + 30 * 60; /* reading 60 + listening 30 */
       test.subTests = { reading: rItems.length, listening: lItems.length };
       return test;
@@ -4499,7 +4510,7 @@ var StudyPlan = {
 /* ================ 06-sets.js ================ */
 /* =========================================================================
    IELTS MASTERY — PRACTICE SETS
-   A catalogue of 20 numbered, selectable practice sets for each skill
+   A catalogue of 30 numbered, selectable practice sets for each skill
    (Reading · Listening · Writing · Speaking). Every set is reproducible:
    set #7 always contains the same questions, so a score means something
    and can be compared across attempts.
@@ -4516,7 +4527,7 @@ var StudyPlan = {
    the student to the catalogue with the score attached to the card.
    ========================================================================= */
 var PracticeSets = (function () {
-  var PER_SKILL = 20;
+  var PER_SKILL = 30;
 
   /* ---- deterministic helpers (same set number → same questions) ---- */
   function hash(str) {
@@ -4697,7 +4708,7 @@ var PracticeSets = (function () {
     return objectiveDescriptor(skill, n);
   }
 
-  /** 20 descriptors for one skill, in set order. */
+  /** 30 descriptors for one skill, in set order. */
   function catalog(skill) {
     var out = [], n;
     for (n = 1; n <= PER_SKILL; n++) {
@@ -4723,7 +4734,7 @@ var PracticeSets = (function () {
     };
   }
 
-  /** Summary across a skill's 20 sets, for the home-page block. */
+  /** Summary across a skill's 30 sets, for the home-page block. */
   function summary(skill) {
     var cat = catalog(skill), done = 0, bands = [];
     cat.forEach(function (d) {
@@ -5531,7 +5542,7 @@ var NAV = [
 function navHTML() {
   var p = Store.get().profile, b = Analytics.bands();
   var examDays = clamp(daysBetween(Date.now(), new Date(p.examDate + "T00:00:00")), 0, 999);
-  return '<div class="brand"><div class="logo">IE</div><div><b>IELTS Mastery</b><span>Practice Platform</span></div></div>' +
+  return '<div class="brand"><div class="logo">IE</div><div><b>IELTS Mastery</b><span>Practice Platform</span></div><button class="sidebar-close" data-act="close-menu" aria-label="Close navigation menu" title="Close menu">×</button></div>' +
     NAV.map(function (g) {
       return '<div class="nav-group">' + g.g + "</div><nav class=\"nav\">" + g.items.map(function (i) {
         return '<a href="#' + i[0] + '" data-act="go" data-route="' + i[0] + '" class="' + (App.route === i[0] ? "active" : "") + '"><span class="ic">' + i[2] + "</span>" + i[1] + "</a>";
@@ -5553,7 +5564,7 @@ function topbarHTML() {
   var titles = {
     dashboard: ["Dashboard", "Your current estimated bands, priorities and next actions"],
     practice: ["Practice", "Choose a mode: quick, skill, question-type, weakness, timed or untimed"],
-    sets: ["Practice Sets", "20 numbered, scored sets for every skill"],
+    sets: ["Practice Sets", "30 numbered, scored sets for every skill"],
     mock: ["Mock Tests", "Full exam simulation across all four skills"],
     reading: ["Reading", "Academic and General Training passages, 14 question types"],
     listening: ["Listening", "Four sections, 40 questions, transcripts with trap analysis"],
@@ -5767,7 +5778,7 @@ function setsBlockHTML(skill) {
   var chips = show.map(function (x) {
     return '<button class="btn sm" data-act="open-set" data-key="' + x.d.key + '">Set ' + x.d.n + (x.s.lastBand != null ? " · " + x.s.lastBand.toFixed(1) : "") + "</button>";
   }).join("");
-  return '<div class="card"><div class="card-h"><h3>Practice sets — 20 scored ' + esc(skill) + ' tests</h3><div class="spacer"></div><span class="chip ' + (sum.done === sum.total ? "green" : "grey") + '">' + sum.done + "/" + sum.total + " attempted" + (sum.best != null ? " · best " + sum.best.toFixed(1) : "") + '</span></div>' +
+  return   '<div class="card"><div class="card-h"><h3>Practice sets — ' + PracticeSets.PER_SKILL + ' scored ' + esc(skill) + ' tests</h3><div class="spacer"></div><span class="chip ' + (sum.done === sum.total ? "green" : "grey") + '">' + sum.done + "/" + sum.total + " attempted" + (sum.best != null ? " · best " + sum.best.toFixed(1) : "") + '</span></div>' +
     '<p class="small muted">' + PracticeSets.PER_SKILL + ' fixed sets, each scored and reproducible. Your best and latest score stays on every set, so you can practise more and watch the number move.</p>' +
     '<div class="pill-row">' + chips + '</div>' +
     '<div class="row" style="margin-top:10px"><button class="btn primary" data-act="go" data-route="sets" data-skill="' + skill + '">See all ' + PracticeSets.PER_SKILL + " sets</button></div></div>";
@@ -6124,7 +6135,6 @@ function transcriptReviewHTML(test, r) {
   out += '<div class="legend" style="margin-top:10px"><span><i style="background:#fff8dc;border:1px solid #f2e0a8"></i>answer location</span><span><i style="background:#fdf2f5;border:1px solid #f6d7e0"></i>distractor signal — a fact the speaker withdrew or corrected</span><span>Spelling and word limits are part of the mark — check your answer against the exact script wording.</span></div>';
   return out;
 }
-
 
 /* ================ 04-views-b.js ================ */
 /* =========================================================================
@@ -6918,7 +6928,8 @@ var ACTIONS = {
     App.launchTest(t);
   },
   "start-mock": function () {
-    var t = Bank.assemble({ mode: "full", title: "Full Mock Test" });
+    var mockNumber = Store.get().attempts.filter(function (a) { return a.mode === "full"; }).length + 1;
+    var t = Bank.assemble({ mode: "full", mockRound: mockNumber - 1, title: "Full Mock Test " + mockNumber });
     App.launchTest(t);
   },
   "start-mock-section": function (el) {
@@ -7474,6 +7485,9 @@ function boot() {
   window.addEventListener("hashchange", function () {
     var r = window.location.hash.replace("#", "");
     if (r && Views[r] && r !== App.route) App.go(r);
+  });
+  window.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") ACTIONS["close-menu"]();
   });
   var start = window.location.hash.replace("#", "");
   App.route = Views[start] ? start : "dashboard";

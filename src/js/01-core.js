@@ -391,13 +391,14 @@ var Bank = {
     var target = test.bandTarget;
     if (o.mode === "full") {
       var rItems = [], lItems = [];
+      var mockRound = Math.max(0, parseInt(o.mockRound || 0, 10));
       var acad = (window.BANK_READING[test.module] || []);
       var parts = test.module === "general" ? [1, 2] : [1, 2, 3];
       test.contexts = [];
       parts.forEach(function (part) {
         var pool = stale(acad.filter(function (p) { return p.part === part; }));
         if (!pool.length) pool = acad.filter(function (p) { return p.part === part; });
-        var p = pool.length ? sample(pool, 1)[0] : null;
+        var p = pool.length ? pool[(mockRound + part - 1) % pool.length] : null;
         if (p) {
           test.contexts.push(p);
           p.questions.forEach(function (q) {
@@ -409,9 +410,17 @@ var Bank = {
          questions the student has seen least often, so a second mock is fresh */
       var allSecs = window.BANK_LISTENING.sections || [];
       var lsecs = [], bestFresh = -1;
-      (window.BANK_LISTENING.tests || []).forEach(function (tst) {
+      var listeningTests = window.BANK_LISTENING.tests || [];
+      var preferredTest = o.mockRound != null && listeningTests.length ? listeningTests[mockRound % listeningTests.length] : null;
+      listeningTests.forEach(function (tst) {
         var secs = sortBy(allSecs.filter(function (s) { return s.testId === tst.id; }), function (s) { return s.number; });
         if (secs.length < 4) return;
+        if (preferredTest && tst.id === preferredTest.id) {
+          lsecs = secs;
+          bestFresh = Number.MAX_SAFE_INTEGER;
+          return;
+        }
+        if (lsecs.length && bestFresh === Number.MAX_SAFE_INTEGER) return;
         var fresh = 0;
         secs.forEach(function (s) { s.questions.forEach(function (q) { if (!seen[s.id + "-" + q.n]) fresh++; }); });
         if (fresh > bestFresh) { bestFresh = fresh; lsecs = secs; }
@@ -427,7 +436,7 @@ var Bank = {
         });
       });
       test.items = rItems.concat(lItems);
-      test.skill = "mixed"; test.title = "Full Mock Test"; test.timed = true;
+      test.skill = "mixed"; test.title = o.title || "Full Mock Test"; test.timed = true;
       test.durationSec = 60 * 60 + 30 * 60; /* reading 60 + listening 30 */
       test.subTests = { reading: rItems.length, listening: lItems.length };
       return test;

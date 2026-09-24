@@ -1,6 +1,6 @@
 /* =========================================================================
    IELTS MASTERY — PRACTICE SETS
-   A catalogue of 20 numbered, selectable practice sets for each skill
+   A catalogue of 30 numbered, selectable practice sets for each skill
    (Reading · Listening · Writing · Speaking). Every set is reproducible:
    set #7 always contains the same questions, so a score means something
    and can be compared across attempts.
@@ -17,7 +17,7 @@
    the student to the catalogue with the score attached to the card.
    ========================================================================= */
 var PracticeSets = (function () {
-  var PER_SKILL = 20;
+  var PER_SKILL = 30;
 
   /* ---- deterministic helpers (same set number → same questions) ---- */
   function hash(str) {
@@ -198,7 +198,7 @@ var PracticeSets = (function () {
     return objectiveDescriptor(skill, n);
   }
 
-  /** 20 descriptors for one skill, in set order. */
+  /** 30 descriptors for one skill, in set order. */
   function catalog(skill) {
     var out = [], n;
     for (n = 1; n <= PER_SKILL; n++) {
@@ -224,7 +224,7 @@ var PracticeSets = (function () {
     };
   }
 
-  /** Summary across a skill's 20 sets, for the home-page block. */
+  /** Summary across a skill's 30 sets, for the home-page block. */
   function summary(skill) {
     var cat = catalog(skill), done = 0, bands = [];
     cat.forEach(function (d) {
