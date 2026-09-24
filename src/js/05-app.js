@@ -89,7 +89,8 @@ var ACTIONS = {
     var skill = el.dataset.skill || "reading";
     var types = (el.dataset.types || "").split(",").filter(Boolean);
     var count = parseInt(el.dataset.count || "10", 10);
-    App.launchTest({ mode: types.length ? "type" : "skill", skill: skill, types: types, count: count, timed: true, title: (types.length ? (TYPELABEL[types[0]] || types[0]) + " drill" : skill + " practice") });
+    var t = Bank.assemble({ mode: types.length ? "type" : "skill", skill: skill, types: types, count: count, timed: true, title: (types.length ? (TYPELABEL[types[0]] || types[0]) + " drill" : skill + " practice") });
+    App.launchTest(t);
   },
   "start-custom": function () {
     var skill = $("#pr-skill").value, count = parseInt($("#pr-count").value, 10), timed = $("#pr-timed").value === "1";
@@ -100,7 +101,8 @@ var ACTIONS = {
       var items = t1.items.concat(t2.items); App.launchTest(prep({ items: items, contexts: t1.contexts.concat(t2.contexts), skill: "mixed", module: Store.get().profile.module, timed: timed, title: "Mixed practice", mode: "quick", durationSec: count * 55 }));
       return;
     }
-    App.launchTest({ mode: "skill", skill: skill, count: count, timed: timed, title: skill + " practice" });
+    var t = Bank.assemble({ mode: "skill", skill: skill, count: count, timed: timed, title: skill + " practice" });
+    App.launchTest(t);
   },
   "start-diagnostic": function () {
     var parts = [["reading", 6], ["listening", 6]];

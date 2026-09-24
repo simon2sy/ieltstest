@@ -1,7 +1,7 @@
 /* =========================================================================
-   IELTS MASTERY — VIEWS A
-   App shell + router registry → dashboard → practice hub → mock →
-   universal test runner (reading & listening) → results & explanations
+   IELTS MASTERY â€” VIEWS A
+   App shell + router registry â†’ dashboard â†’ practice hub â†’ mock â†’
+   universal test runner (reading & listening) â†’ results & explanations
    ========================================================================= */
 var App = {
   route: "dashboard",
@@ -42,22 +42,22 @@ var App = {
 
 /* ------------------------------ navigation ------------------------------ */
 var NAV = [
-  { g: "Overview", items: [["dashboard", "Dashboard", "▦"], ["practice", "Practice", "◎"], ["sets", "Practice Sets", "⊞"], ["mock", "Mock Tests", "◈"]] },
-  { g: "Skills", items: [["reading", "Reading", "▤"], ["listening", "Listening", "◉"], ["writing", "Writing", "✎"], ["speaking", "Speaking", "◐"]] },
-  { g: "Builders", items: [["vocabulary", "Vocabulary", "◫"], ["grammar", "Grammar", "❖"], ["tutor", "AI Tutor", "✦"]] },
-  { g: "Insight", items: [["progress", "Progress", "▧"], ["plan", "Study Plan", "▤"], ["about", "Scoring & Bank", "◉"]] }
+  { g: "Overview", items: [["dashboard", "Dashboard", "D"], ["practice", "Practice", "P"], ["sets", "Practice Sets", "S"], ["mock", "Mock Tests", "M"]] },
+  { g: "Skills", items: [["reading", "Reading", "R"], ["listening", "Listening", "L"], ["writing", "Writing", "W"], ["speaking", "Speaking", "S"]] },
+  { g: "Builders", items: [["vocabulary", "Vocabulary", "V"], ["grammar", "Grammar", "G"], ["tutor", "AI Tutor", "T"]] },
+  { g: "Insight", items: [["progress", "Progress", "P"], ["plan", "Study Plan", "S"], ["about", "Scoring & Bank", "A"]] }
 ];
 function navHTML() {
   var p = Store.get().profile, b = Analytics.bands();
   var examDays = clamp(daysBetween(Date.now(), new Date(p.examDate + "T00:00:00")), 0, 999);
-  return '<div class="brand"><div class="logo">IE</div><div><b>IELTS Mastery</b><span>Practice Platform</span></div><button class="sidebar-close" data-act="close-menu" aria-label="Close navigation menu" title="Close menu">×</button></div>' +
+  return '<div class="brand"><div class="logo">IE</div><div><b>IELTS Mastery</b><span>Practice Platform</span></div><button class="sidebar-close" data-act="close-menu" aria-label="Close navigation menu" title="Close menu">X</button></div>' +
     NAV.map(function (g) {
       return '<div class="nav-group">' + g.g + "</div><nav class=\"nav\">" + g.items.map(function (i) {
         return '<a href="#' + i[0] + '" data-act="go" data-route="' + i[0] + '" class="' + (App.route === i[0] ? "active" : "") + '"><span class="ic">' + i[2] + "</span>" + i[1] + "</a>";
       }).join("") + "</nav>";
     }).join("") +
     '<div class="side-card"><h5>Your targets</h5>' +
-    '<div class="row" style="justify-content:space-between"><span>Current est.</span><b>' + (b.overall == null ? "—" : b.overall.toFixed(1)) + "</b></div>" +
+    '<div class="row" style="justify-content:space-between"><span>Current est.</span><b>' + (b.overall == null ? "â€”" : b.overall.toFixed(1)) + "</b></div>" +
     '<div class="row" style="justify-content:space-between"><span>Target</span><b>' + p.targetBand.toFixed(1) + "</b></div>" +
     '<div class="row" style="justify-content:space-between"><span>Exam in</span><b>' + examDays + " days</b></div>" +
     '<div class="row" style="justify-content:space-between"><span>Daily study</span><b>' + p.dailyMinutes + " min</b></div>" +
@@ -71,13 +71,13 @@ function navHTML() {
 function topbarHTML() {
   var titles = {
     dashboard: ["Dashboard", "Your current estimated bands, priorities and next actions"],
-    practice: ["Practice", "Choose a mode: quick, skill, question-type, weakness, timed or untimed"],
-    sets: ["Practice Sets", "30 numbered, scored sets for every skill"],
-    mock: ["Mock Tests", "Full exam simulation across all four skills"],
-    reading: ["Reading", "Academic and General Training passages, 14 question types"],
-    listening: ["Listening", "Four sections, 40 questions, transcripts with trap analysis"],
-    writing: ["Writing", "Academic Task 1, GT Task 1 and Task 2 with band samples"],
-    speaking: ["Speaking", "Part 1, Part 2 cue cards and Part 3 discussions"],
+    practice: ["Practice", "Choose a skill and start a short practice session"],
+    sets: ["Practice Sets", "Choose a numbered set for Reading, Listening, Writing or Speaking"],
+    mock: ["Mock Tests", "Practise a complete exam-style test"],
+    reading: ["Reading", "Read a passage and answer the questions"],
+    listening: ["Listening", "Listen carefully and answer the questions"],
+    writing: ["Writing", "Practise a task and check your answer"],
+    speaking: ["Speaking", "Practise the three parts of the speaking test"],
     vocabulary: ["Vocabulary", "Academic word list entries with spaced repetition"],
     grammar: ["Grammar", "13 error categories, mistakes drive your exercises"],
     progress: ["Progress", "Accuracy by type, difficulty and timing over time"],
@@ -87,18 +87,18 @@ function topbarHTML() {
     runner: ["Test in progress", "Answer all questions, then submit for scoring"],
     result: ["Result", "Estimated band, breakdown and improvement guidance"],
     writingrun: ["Writing task", "Plan, write, evaluate"],
-    speakingrun: ["Speaking test", "Part 1 → Part 2 → Part 3"]
+    speakingrun: ["Speaking test", "Part 1 to Part 2 to Part 3"]
   };
   var t = titles[App.route] || ["IELTS Mastery", ""];
   var b = Analytics.bands();
-  return '<button class="menu-btn" data-act="toggle-menu" aria-label="Open menu">☰</button><div><h1>' + esc(t[0]) + '</h1><div class="sub">' + esc(t[1]) + "</div></div>" +
+  return '<button class="menu-btn" data-act="toggle-menu" aria-label="Open menu">Menu</button><div><h1>' + esc(t[0]) + '</h1><div class="sub">' + esc(t[1]) + "</div></div>" +
     '<div class="spacer"></div>' +
     '<span class="chip teal tb-chip">Target ' + Store.get().profile.targetBand.toFixed(1) + "</span>" +
-    '<span class="chip tb-chip">Est. overall ' + (b.overall == null ? "—" : b.overall.toFixed(1)) + "</span>";
+    '<span class="chip tb-chip">Est. overall ' + (b.overall == null ? "â€”" : b.overall.toFixed(1)) + "</span>";
 }
 
-/* Mobile bottom tab bar — fixed navigation for phones, hidden on desktop. */
-var MOBILE_TABS = [["dashboard", "▦", "Home"], ["sets", "⊞", "Sets"], ["reading", "▤", "Reading"], ["listening", "◉", "Listen"], ["writing", "✎", "Write"], ["speaking", "◐", "Speak"]];
+/* Mobile bottom tab bar â€” fixed navigation for phones, hidden on desktop. */
+var MOBILE_TABS = [["dashboard", "D", "Home"], ["sets", "S", "Sets"], ["reading", "R", "Reading"], ["listening", "L", "Listen"], ["writing", "W", "Write"], ["speaking", "S", "Speak"]];
 function mobileTabsHTML() {
   var runnerLike = App.route === "runner" || App.route === "writingrun" || App.route === "speakingrun";
   if (runnerLike) return "";
@@ -138,24 +138,24 @@ Views.dashboard = function () {
     SKILLS.map(function (s) {
       var v = b[s], gap = v == null ? null : round1(p.targetBand - v);
       var cls = v == null ? "" : gap <= 0 ? "good" : gap <= 0.5 ? "warn" : "bad";
-      return '<div class="card tight"><div class="stat ' + cls + '"><div class="k">' + s + '</div><div class="v">' + (v == null ? "—" : v.toFixed(1)) + '</div>' +
+      return '<div class="card tight"><div class="stat ' + cls + '"><div class="k">' + s + '</div><div class="v">' + (v == null ? "â€”" : v.toFixed(1)) + '</div>' +
         '<div class="d">' + (v == null ? "no attempts yet" : (gap <= 0 ? "at target" : gap.toFixed(1) + " below target")) + "</div></div></div>";
     }).join("") +
     "</div>" +
     '<div class="grid g3">' +
     '<div class="card"><div class="card-h"><h2>Overall estimate</h2></div>' +
-    '<div class="band-hero"><div><div class="big">' + (b.overall == null ? "—" : b.overall.toFixed(1)) + '</div><div class="lbl">Estimated IELTS Band</div></div>' +
+    '<div class="band-hero"><div><div class="big">' + (b.overall == null ? "â€”" : b.overall.toFixed(1)) + '</div><div class="lbl">Estimated IELTS Band</div></div>' +
     '<div style="flex:1"><div class="row" style="justify-content:space-between"><span class="small">Target ' + p.targetBand.toFixed(1) + '</span><span class="small muted">' + (b.overall == null ? "" : (b.overall >= p.targetBand ? "Target reached" : "Gap " + round1(p.targetBand - b.overall))) + '</span></div>' +
     '<div class="bar"><i style="width:' + clamp(((b.overall || 0) / 9) * 100, 3, 100) + '%"></i></div>' +
-    '<div class="small muted" style="margin-top:6px">' + (b.overall == null ? "Complete at least two skill tests to generate an overall estimate." : bandDescriptor(b.overall) + " · based on " + Store.get().attempts.length + " completed attempts") + '</div>' +
-    '<div class="small" style="margin-top:10px">Accuracy ' + pct(acc) + '% · Avg. session ' + Math.round(tp.avgSeconds / 60) + ' min · Words saved ' + vp.saved + '</div></div></div>' +
-    '<div class="note" style="margin-top:12px"><span class="ic">ⓘ</span><div><b>Estimated bands.</b> Reading and Listening scores are objective; Writing and Speaking scores are AI-generated estimates and may differ from an official examiner\'s.</div></div>' +
+    '<div class="small muted" style="margin-top:6px">' + (b.overall == null ? "Complete at least two skill tests to generate an overall estimate." : bandDescriptor(b.overall) + " Â· based on " + Store.get().attempts.length + " completed attempts") + '</div>' +
+    '<div class="small" style="margin-top:10px">Accuracy ' + pct(acc) + '% Â· Avg. session ' + Math.round(tp.avgSeconds / 60) + ' min Â· Words saved ' + vp.saved + '</div></div></div>' +
+    '<div class="note" style="margin-top:12px"><span class="ic">â“˜</span><div><b>Estimated bands.</b> Reading and Listening scores are objective; Writing and Speaking scores are AI-generated estimates and may differ from an official examiner\'s.</div></div>' +
     "</div>" +
     '<div class="card"><div class="card-h"><h2>Priority order</h2><div class="spacer"></div><span class="chip grey">auto-ranked</span></div>' +
     prio.map(function (x) {
       return '<div class="priority p' + Math.min(3, x.rank) + '"><div class="rank">' + x.rank + '</div><div><div class="b">' + x.skill.charAt(0).toUpperCase() + x.skill.slice(1) + "</div><div class=\"small muted\">" + esc(x.reason) + "</div></div></div>";
     }).join("") +
-    '<button class="btn primary block" data-act="start-weakness">Start weakness practice →</button></div>' +
+    '<button class="btn primary block" data-act="start-weakness">Start weakness practice â†’</button></div>' +
     "</div>" +
     '<div class="grid g2">' +
     '<div class="card"><div class="card-h"><h2>Recommended next practice</h2></div>' +
@@ -165,15 +165,15 @@ Views.dashboard = function () {
           r.skill === "vocabulary" ? '<button class="btn sm" style="margin-top:8px" data-act="go" data-route="vocabulary">Open Vocabulary</button>' :
             '<button class="btn sm primary" style="margin-top:8px" data-act="quick-start" data-skill="' + r.skill + '" data-types="' + (r.types || []).join(",") + '" data-count="20">Start drill</button>') +
         "</div>";
-    }).join("") : '<div class="empty"><div class="big">◎</div>Complete a test and personalised recommendations appear here.</div>') +
+    }).join("") : '<div class="empty"><div class="big">â—Ž</div>Complete a test and personalised recommendations appear here.</div>') +
     "</div>" +
     '<div class="card"><div class="card-h"><h2>Recent activity</h2><div class="spacer"></div><button class="btn sm" data-act="go" data-route="progress">Full analytics</button></div>' +
     (atts.length ? '<table class="tbl"><thead><tr><th>Date</th><th>Mode</th><th>Skill</th><th>Raw</th><th>Band</th><th>Time</th><th></th></tr></thead><tbody>' +
       atts.map(function (a) {
-        return "<tr><td>" + fmtDateTime(a.ts) + "</td><td>" + esc(a.mode) + "</td><td>" + esc(a.skill) + "</td><td>" + (a.raw != null ? a.raw + "/" + a.outOf : "—") + "</td><td><b>" + (a.band == null ? "—" : a.band.toFixed(1)) + "</b></td><td>" + fmtTime(a.timeSpentSec) + '</td><td><button class="btn sm" data-act="view-attempt" data-id="' + a.id + '">Detail</button></td></tr>';
-      }).join("") + "</tbody></table>" : '<div class="empty"><div class="big">▦</div>No attempts yet. Start with a diagnostic test.</div>') +
+        return "<tr><td>" + fmtDateTime(a.ts) + "</td><td>" + esc(a.mode) + "</td><td>" + esc(a.skill) + "</td><td>" + (a.raw != null ? a.raw + "/" + a.outOf : "â€”") + "</td><td><b>" + (a.band == null ? "â€”" : a.band.toFixed(1)) + "</b></td><td>" + fmtTime(a.timeSpentSec) + '</td><td><button class="btn sm" data-act="view-attempt" data-id="' + a.id + '">Detail</button></td></tr>';
+      }).join("") + "</tbody></table>" : '<div class="empty"><div class="big">â–¦</div>No attempts yet. Start with a diagnostic test.</div>') +
     '<div class="row" style="margin-top:12px"><button class="btn primary" data-act="start-diagnostic">Take the 12-question diagnostic</button>' +
-    (nextPlan ? '<button class="btn" data-act="go" data-route="plan">Today\'s plan: ' + esc(nextPlan.tasks[0].text.slice(0, 40)) + "…</button>" : "") + "</div>" +
+    (nextPlan ? '<button class="btn" data-act="go" data-route="plan">Today\'s plan: ' + esc(nextPlan.tasks[0].text.slice(0, 40)) + "â€¦</button>" : "") + "</div>" +
     "</div></div>";
 };
 
@@ -182,7 +182,7 @@ Views.onboarding = function () {
   return '<div class="card" style="max-width:760px;margin:0 auto">' +
     storageWarning() +
     '<h2>Set up your preparation profile</h2>' +
-    '<p class="muted">Everything on this platform — difficulty of questions, timing, priorities and your study plan — is driven by these five settings. You can change them at any time.</p>' +
+    '<p class="muted">Everything on this platform â€” difficulty of questions, timing, priorities and your study plan â€” is driven by these five settings. You can change them at any time.</p>' +
     '<div class="grid g2">' +
     '<div class="field"><label>Test module</label><select id="ob-module"><option value="academic"' + (p.module === "academic" ? " selected" : "") + '>Academic</option><option value="general"' + (p.module === "general" ? " selected" : "") + ">General Training</option></select></div>" +
     '<div class="field"><label>Current estimated band</label><select id="ob-cur">' + [4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9].map(function (x) { return '<option value="' + x + '"' + (x === p.currentBand ? " selected" : "") + ">Band " + x.toFixed(1) + "</option>"; }).join("") + "</select></div>" +
@@ -192,24 +192,25 @@ Views.onboarding = function () {
     '<div class="field"><label>Your name (optional)</label><input type="text" id="ob-name" value="' + esc(p.name) + '" placeholder="e.g. Aarav"></div>' +
     "</div>" +
     '<button class="btn primary lg" data-act="save-onboarding">Save and start</button>' +
-    '<div class="note" style="margin-top:14px"><span class="ic">ⓘ</span><div>Reading and Listening results are objective. Writing and Speaking results are AI-generated <b>estimates</b> and are not official IELTS scores.</div></div>' +
+    '<div class="note" style="margin-top:14px"><span class="ic">â“˜</span><div>Reading and Listening results are objective. Writing and Speaking results are AI-generated <b>estimates</b> and are not official IELTS scores.</div></div>' +
     "</div>";
 };
 
 Views.practice = function () {
   var p = Store.get().profile, types = { reading: Bank.typesBy("reading"), listening: Bank.typesBy("listening") };
   var b = Analytics.bands();
-  return '<div class="grid g2"><div class="card"><h2>Quick start</h2>' +
-    '<p class="muted small">Sets are drawn from the question pools, filtered by your band target (' + p.targetBand.toFixed(1) + ') and never repeat a question you have already seen unless the pool is exhausted.</p>' +
-    '<div class="field"><label>Skill</label><select id="pr-skill"><option value="reading">Reading</option><option value="listening">Listening</option><option value="mixed">Mixed objective (Reading + Listening)</option></select></div>' +
-    '<div class="grid g2"><div class="field"><label>Session length</label><select id="pr-count"><option value="5">5 questions (quick)</option><option value="10" selected>10 questions</option><option value="20">20 questions</option><option value="40">40 questions</option></select></div>' +
-    '<div class="field"><label>Mode</label><select id="pr-timed"><option value="1">Timed (exam pace)</option><option value="0">Untimed learning mode</option></select></div></div>' +
-    '<div class="row"><button class="btn primary" data-act="start-custom">Start practice</button>' +
-    '<button class="btn" data-act="start-diagnostic">12-question diagnostic</button>' +
-    '<button class="btn teal" data-act="start-bandsweep">Band-sweep challenge (mixed difficulty)</button></div></div>' +
-    '<div class="card"><h2>Practice modes</h2>' +
-    [["Quick Practice", "5–10 questions across the skills you choose, with full explanations.", [["quick-start", "data-skill=reading data-count=10", "Reading ×10"], ["quick-start", "data-skill=listening data-count=10", "Listening ×10"]]],
-    ["Question-Type Practice", "Drill one question type until the pattern is automatic — e.g. 20 True/False/Not Given items.", []],
+  return '<div class="card simple-card"><h2>Start a practice session</h2>' +
+    '<p class="muted small">Choose a skill, choose how many questions you want, then press Start practice.</p>' +
+    '<div class="field"><label for="pr-skill">Skill</label><select id="pr-skill"><option value="reading">Reading</option><option value="listening">Listening</option><option value="mixed">Reading + Listening</option></select></div>' +
+    '<div class="grid g2"><div class="field"><label for="pr-count">Number of questions</label><select id="pr-count"><option value="5">5 questions</option><option value="10" selected>10 questions</option><option value="20">20 questions</option><option value="40">40 questions</option></select></div>' +
+    '<div class="field"><label for="pr-timed">How do you want to practise?</label><select id="pr-timed"><option value="1">Timed</option><option value="0">Untimed</option></select></div></div>' +
+    '<div class="row"><button class="btn primary lg" data-act="start-custom">Start practice</button>' +
+    '<button class="btn" data-act="start-diagnostic">Quick 12-question check</button>' +
+    '<button class="btn" data-act="start-weakness">Practise my weak areas</button></div></div>' +
+    '<div class="card simple-card"><h2>Other ways to practise</h2>' +
+    '<p class="muted small">Use these when you know what you want to work on.</p>' +
+    [["Quick Practice", "5â€“10 questions across the skills you choose, with full explanations.", [["quick-start", "data-skill=reading data-count=10", "Reading Ã—10"], ["quick-start", "data-skill=listening data-count=10", "Listening Ã—10"]]],
+    ["Question-Type Practice", "Drill one question type until the pattern is automatic â€” e.g. 20 True/False/Not Given items.", []],
     ["Weakness Practice", "Built from your error log: the types where your accuracy is lowest.", [["start-weakness", "", "Build from my mistakes"]]],
     ["Full Mock Test", "Reading + Listening under exam timing, then Writing and Speaking.", [["start-mock", "", "Start full mock"]]],
     ["Band Target Mode", "Questions matched to your target band so practice difficulty keeps pace with your goal.", [["start-bandsweep", "", "Start band-matched set"]]]
@@ -218,15 +219,15 @@ Views.practice = function () {
         (m[2].length ? '<div class="row tight">' + m[2].map(function (x) { return '<button class="btn sm" data-act="' + x[0] + '" ' + x[1] + ">" + x[2] + "</button>"; }).join("") + "</div>" : "") + "</div>";
     }).join("") +
     "</div></div>" +
-    '<div class="grid g2"><div class="card"><div class="card-h"><h3>Question-type drills — Reading</h3><div class="spacer"></div><span class="chip grey">' + types.reading.length + " types</span></div>" +
-    '<div class="pill-row">' + types.reading.map(function (t) { return '<button class="btn sm" data-act="quick-start" data-skill="reading" data-types="' + t.type + '" data-count="20">' + t.label + " ×20"; }).join("") + "</div></div>" +
-    '<div class="card"><div class="card-h"><h3>Question-type drills — Listening</h3><div class="spacer"></div><span class="chip grey">' + types.listening.length + " types</span></div>" +
-    '<div class="pill-row">' + types.listening.map(function (t) { return '<button class="btn sm" data-act="quick-start" data-skill="listening" data-types="' + t.type + '" data-count="20">' + t.label + " ×20"; }).join("") + "</div></div></div>" +
+    '<div class="grid g2"><div class="card"><div class="card-h"><h3>Question-type drills â€” Reading</h3><div class="spacer"></div><span class="chip grey">' + types.reading.length + " types</span></div>" +
+    '<div class="pill-row">' + types.reading.map(function (t) { return '<button class="btn sm" data-act="quick-start" data-skill="reading" data-types="' + t.type + '" data-count="20">' + t.label + " Ã—20"; }).join("") + "</div></div>" +
+    '<div class="card"><div class="card-h"><h3>Question-type drills â€” Listening</h3><div class="spacer"></div><span class="chip grey">' + types.listening.length + " types</span></div>" +
+    '<div class="pill-row">' + types.listening.map(function (t) { return '<button class="btn sm" data-act="quick-start" data-skill="listening" data-types="' + t.type + '" data-count="20">' + t.label + " Ã—20"; }).join("") + "</div></div></div>" +
     '<div class="card"><div class="card-h"><h3>Practice by difficulty ladder</h3></div><div class="pill-row">' +
     ["beginner", "intermediate", "advanced", "band7", "band8", "band9"].map(function (d) {
       var n = Bank.filter({ difficulty: d }).length;
       return '<button class="btn sm" data-act="practice-difficulty" data-difficulty="' + d + '"' + (n ? "" : " disabled") + ">" + d + " (" + n + ")</button>";
-    }).join("") + '</div><div class="small muted" style="margin-top:8px">Difficulty is based on linguistic complexity and reasoning load, not on obscure vocabulary. Beginner ≈ Band 4.5–5.5, Band 9 items mirror the hardest published passages.</div></div>' +
+    }).join("") + '</div><div class="small muted" style="margin-top:8px">Difficulty is based on linguistic complexity and reasoning load, not on obscure vocabulary. Beginner â‰ˆ Band 4.5â€“5.5, Band 9 items mirror the hardest published passages.</div></div>' +
     setsSummaryCardHTML();
 };
 
@@ -234,50 +235,50 @@ Views.mock = function () {
   var b = Analytics.bands();
   return '<div class="grid g2"><div class="card"><h2>Full mock test</h2>' +
     '<p class="small muted">A complete simulation: Reading (60 min, 40 questions), Listening (30 min, 40 questions), then a Writing task and a Speaking interview. Reading and Listening are scored objectively; Writing and Speaking are AI estimates.</p>' +
-    '<ul class="small"><li><b>Reading</b> — ' + (Store.get().profile.module === "general" ? "2–3 passages, General Training pool" : "3 passages, Academic pool") + "</li>" +
-    "<li><b>Listening</b> — 4 sections, 40 questions, spoken audio with accent variation</li>" +
-    "<li><b>Writing</b> — one Task 1 and one Task 2 task</li>" +
-    "<li><b>Speaking</b> — a full interview: Part 1 → cue card → Part 3</li></ul>" +
+    '<ul class="small"><li><b>Reading</b> â€” ' + (Store.get().profile.module === "general" ? "2â€“3 passages, General Training pool" : "3 passages, Academic pool") + "</li>" +
+    "<li><b>Listening</b> â€” 4 sections, 40 questions, spoken audio with accent variation</li>" +
+    "<li><b>Writing</b> â€” one Task 1 and one Task 2 task</li>" +
+    "<li><b>Speaking</b> â€” a full interview: Part 1 â†’ cue card â†’ Part 3</li></ul>" +
     '<div class="row"><button class="btn primary lg" data-act="start-mock">Start objective sections (90 min)</button>' +
     '<button class="btn" data-act="start-mock-section" data-section="reading">Reading only</button>' +
     '<button class="btn" data-act="start-mock-section" data-section="listening">Listening only</button></div></div>' +
     '<div class="card"><h2>Section-by-section simulation</h2>' +
     '<p class="small muted">Recommended while you build stamina: sit one section under true exam conditions, review it, then sit the next the following day.</p>' +
-    [["reading", "Reading — 3 passages, 40 questions, 60 minutes", "60 min"],
-    ["listening", "Listening — 4 sections, 40 questions, ~30 minutes", "30 min"],
-    ["writing", "Writing — Task 1 + Task 2, 60 minutes", "60 min"],
-    ["speaking", "Speaking — 11–14 minutes, three parts", "14 min"]].map(function (x) {
+    [["reading", "Reading â€” 3 passages, 40 questions, 60 minutes", "60 min"],
+    ["listening", "Listening â€” 4 sections, 40 questions, ~30 minutes", "30 min"],
+    ["writing", "Writing â€” Task 1 + Task 2, 60 minutes", "60 min"],
+    ["speaking", "Speaking â€” 11â€“14 minutes, three parts", "14 min"]].map(function (x) {
       return '<div class="row" style="justify-content:space-between;padding:10px 0;border-bottom:1px dashed var(--line-2)"><div><div class="b">' + x[1] + '</div><div class="small muted">Estimated band recorded automatically' + (x[0] === "writing" || x[0] === "speaking" ? " (AI estimate)" : "") + '</div></div><button class="btn sm" data-act="' + (x[0] === "writing" ? "go-writing-random" : x[0] === "speaking" ? "go-speaking-random" : "start-mock-section") + '" data-section="' + x[0] + '">Start</button></div>';
     }).join("") + "</div></div>" +
     '<div class="card"><div class="card-h"><h3>Previous mock attempts</h3></div>' +
     (Store.get().attempts.filter(function (a) { return a.mode === "full" || a.mode === "mock-section"; }).length
       ? '<table class="tbl"><thead><tr><th>Date</th><th>Skill</th><th>Raw</th><th>Estimated band</th><th>Time</th><th></th></tr></thead><tbody>' +
       Store.get().attempts.filter(function (a) { return a.mode === "full" || a.mode === "mock-section"; }).slice(-8).reverse().map(function (a) {
-        return "<tr><td>" + fmtDateTime(a.ts) + "</td><td>" + esc(a.skill) + "</td><td>" + (a.raw != null ? a.raw + "/" + a.outOf : "—") + "</td><td><b>" + (a.band == null ? "—" : a.band.toFixed(1)) + "</b></td><td>" + fmtTime(a.timeSpentSec) + '</td><td><button class="btn sm" data-act="view-attempt" data-id="' + a.id + '">Open</button></td></tr>';
+        return "<tr><td>" + fmtDateTime(a.ts) + "</td><td>" + esc(a.skill) + "</td><td>" + (a.raw != null ? a.raw + "/" + a.outOf : "â€”") + "</td><td><b>" + (a.band == null ? "â€”" : a.band.toFixed(1)) + "</b></td><td>" + fmtTime(a.timeSpentSec) + '</td><td><button class="btn sm" data-act="view-attempt" data-id="' + a.id + '">Open</button></td></tr>';
       }).join("") + "</tbody></table>"
       : '<div class="empty">No mock attempts yet. Start with the objective sections.</div>') + "</div>";
 };
 
 /* ---------------------------- practice sets ----------------------------- */
-var SETSKILLS = [["reading", "Reading", "▤"], ["listening", "Listening", "◉"], ["writing", "Writing", "✎"], ["speaking", "Speaking", "◐"]];
+var SETSKILLS = [["reading", "Reading", "â–¤"], ["listening", "Listening", "â—‰"], ["writing", "Writing", "âœŽ"], ["speaking", "Speaking", "â—"]];
 function setBannerHTML(setKey, extra) {
   if (!setKey) return "";
   extra = extra || {};
   var d = PracticeSets.descriptor(setKey);
   var s = PracticeSets.stats(setKey);
   var setNumber = d ? d.n : "";
-  return '<div class="card tight" style="margin-bottom:16px;border-color:var(--brand)"><div class="row" style="justify-content:space-between;align-items:flex-start"><div><div class="badge">Practice set ' + setNumber + '</div><div class="b" style="margin-top:6px">' + esc(d ? d.title : "Practice set") + (extra.label ? " · " + esc(extra.label) : "") + '</div>' +
-    '<div class="small muted">Set number ' + setNumber + " · " + s.attempts + " attempt" + (s.attempts > 1 ? "s" : "") + (s.best != null ? " · best band " + s.best.toFixed(1) : "") + '</div></div>' +
+  return '<div class="card tight" style="margin-bottom:16px;border-color:var(--brand)"><div class="row" style="justify-content:space-between;align-items:flex-start"><div><div class="badge">Practice set ' + setNumber + '</div><div class="b" style="margin-top:6px">' + esc(d ? d.title : "Practice set") + (extra.label ? " Â· " + esc(extra.label) : "") + '</div>' +
+    '<div class="small muted">Set number ' + setNumber + " Â· " + s.attempts + " attempt" + (s.attempts > 1 ? "s" : "") + (s.best != null ? " Â· best band " + s.best.toFixed(1) : "") + '</div></div>' +
     '<div class="row tight">' + (extra.nextAct ? '<button class="btn sm primary" data-act="' + extra.nextAct + '">' + (extra.nextLabel || "Next") + '</button>' : "") +
     '<button class="btn sm" data-act="go" data-route="sets" data-skill="' + (d ? d.skill : "reading") + '">All practice sets</button></div></div></div>';
 }
 function setsSummaryCardHTML() {
   var rows = SETSKILLS.map(function (s) {
     var sum = PracticeSets.summary(s[0]);
-    return '<div class="row" style="justify-content:space-between;padding:10px 0;border-bottom:1px dashed var(--line-2)"><div><div class="b">' + s[2] + " " + s[1] + '</div><div class="small muted">' + sum.done + "/" + sum.total + " sets attempted" + (sum.best != null ? " · best band " + sum.best.toFixed(1) : " · no scores yet") + '</div></div><button class="btn sm" data-act="go" data-route="sets" data-skill="' + s[0] + '">Open ' + PracticeSets.PER_SKILL + " sets</button></div>";
+    return '<div class="row" style="justify-content:space-between;padding:10px 0;border-bottom:1px dashed var(--line-2)"><div><div class="b">' + s[2] + " " + s[1] + '</div><div class="small muted">' + sum.done + "/" + sum.total + " sets attempted" + (sum.best != null ? " Â· best band " + sum.best.toFixed(1) : " Â· no scores yet") + '</div></div><button class="btn sm" data-act="go" data-route="sets" data-skill="' + s[0] + '">Open ' + PracticeSets.PER_SKILL + " sets</button></div>";
   }).join("");
   return '<div class="card"><div class="card-h"><h3>Numbered practice sets</h3><div class="spacer"></div><span class="chip">' + PracticeSets.PER_SKILL + " per skill</span></div>" +
-    '<p class="small muted">Twenty fixed, scored sets for every skill. Retake a set as often as you like — each attempt is scored and the card keeps your best result, so improvement is measurable set by set.</p>' + rows + "</div>";
+    '<p class="small muted">Twenty fixed, scored sets for every skill. Retake a set as often as you like â€” each attempt is scored and the card keeps your best result, so improvement is measurable set by set.</p>' + rows + "</div>";
 }
 function setsBlockHTML(skill) {
   var sum = PracticeSets.summary(skill);
@@ -285,9 +286,9 @@ function setsBlockHTML(skill) {
   var fresh = cat.filter(function (x) { return !x.s.attempts; });
   var show = fresh.length >= 3 ? fresh.slice(0, 6) : cat.slice(0, 6);
   var chips = show.map(function (x) {
-    return '<button class="btn sm" data-act="open-set" data-key="' + x.d.key + '">Set ' + x.d.n + (x.s.lastBand != null ? " · " + x.s.lastBand.toFixed(1) : "") + "</button>";
+    return '<button class="btn sm" data-act="open-set" data-key="' + x.d.key + '">Set ' + x.d.n + (x.s.lastBand != null ? " Â· " + x.s.lastBand.toFixed(1) : "") + "</button>";
   }).join("");
-  return   '<div class="card"><div class="card-h"><h3>Practice sets — ' + PracticeSets.PER_SKILL + ' scored ' + esc(skill) + ' tests</h3><div class="spacer"></div><span class="chip ' + (sum.done === sum.total ? "green" : "grey") + '">' + sum.done + "/" + sum.total + " attempted" + (sum.best != null ? " · best " + sum.best.toFixed(1) : "") + '</span></div>' +
+  return   '<div class="card"><div class="card-h"><h3>Practice sets â€” ' + PracticeSets.PER_SKILL + ' scored ' + esc(skill) + ' tests</h3><div class="spacer"></div><span class="chip ' + (sum.done === sum.total ? "green" : "grey") + '">' + sum.done + "/" + sum.total + " attempted" + (sum.best != null ? " Â· best " + sum.best.toFixed(1) : "") + '</span></div>' +
     '<p class="small muted">' + PracticeSets.PER_SKILL + ' fixed sets, each scored and reproducible. Your best and latest score stays on every set, so you can practise more and watch the number move.</p>' +
     '<div class="pill-row">' + chips + '</div>' +
     '<div class="row" style="margin-top:10px"><button class="btn primary" data-act="go" data-route="sets" data-skill="' + skill + '">See all ' + PracticeSets.PER_SKILL + " sets</button></div></div>";
@@ -297,9 +298,9 @@ function setCardHTML(d) {
   var chips = (d.types || []).slice(0, 4).map(function (t) { return '<span class="chip grey">' + esc(TYPELABEL[t] || t) + "</span>"; }).join("");
   if ((d.types || []).length > 4) chips += '<span class="chip grey">+' + (d.types.length - 4) + " more</span>";
   var scoreLine = s.attempts
-    ? '<div class="row tight" style="margin-top:8px"><span class="chip ' + (s.best != null && s.best >= 7 ? "green" : "teal") + '">Best ' + (s.best == null ? "—" : s.best.toFixed(1)) + '</span>' +
-      '<span class="chip grey">Last ' + (s.lastBand == null ? "—" : s.lastBand.toFixed(1)) + '</span>' +
-      '<span class="small muted">' + s.attempts + " attempt" + (s.attempts > 1 ? "s" : "") + (s.lastRaw != null ? " · last " + s.lastRaw + "/" + s.lastOutOf : "") + "</span></div>"
+    ? '<div class="row tight" style="margin-top:8px"><span class="chip ' + (s.best != null && s.best >= 7 ? "green" : "teal") + '">Best ' + (s.best == null ? "â€”" : s.best.toFixed(1)) + '</span>' +
+      '<span class="chip grey">Last ' + (s.lastBand == null ? "â€”" : s.lastBand.toFixed(1)) + '</span>' +
+      '<span class="small muted">' + s.attempts + " attempt" + (s.attempts > 1 ? "s" : "") + (s.lastRaw != null ? " Â· last " + s.lastRaw + "/" + s.lastOutOf : "") + "</span></div>"
     : '<div class="small muted" style="margin-top:8px">Not attempted yet</div>';
   return '<div class="card tight" style="display:flex;flex-direction:column">' +
     '<div class="row" style="justify-content:space-between;align-items:flex-start"><div><span class="badge">Set ' + d.n + '</span><div class="b" style="margin-top:6px">' + esc(d.skill) + " practice set</div></div><span class=\"chip " + (d.tone || "grey") + "\">" + esc(d.format) + "</span></div>" +
@@ -318,12 +319,11 @@ Views.sets = function () {
   var tabs = SETSKILLS.map(function (s) {
     return '<button class="btn sm ' + (s[0] === skill ? "primary" : "") + '" data-act="sets-skill" data-skill="' + s[0] + '">' + s[2] + " " + s[1] + " (" + PracticeSets.PER_SKILL + ")</button>";
   }).join("");
-  return '<div class="card"><div class="card-h"><h2>Practice sets</h2><div class="spacer"></div><span class="chip ' + (sum.done === sum.total ? "green" : "grey") + '">' + sum.done + "/" + sum.total + " attempted" + (sum.best != null ? " · best " + sum.best.toFixed(1) : "") + "</span></div>" +
-    '<p class="small muted">' + PracticeSets.PER_SKILL + ' numbered sets for every skill. Each set is fixed — Set 7 always contains exactly the same questions — so a retake produces a score you can compare honestly, and the card keeps your best and latest result. ' +
-    (isWS ? "Writing and Speaking sets are scored by the rubric engine, so the band is an AI estimate." : "Reading and Listening sets are scored objectively against the answer key and converted through the IELTS band table.") + "</p>" +
+  return '<div class="card simple-card"><div class="card-h"><h2>Practice sets</h2><div class="spacer"></div><span class="chip ' + (sum.done === sum.total ? "green" : "grey") + '">' + sum.done + " of " + sum.total + " completed" + (sum.best != null ? " Â· best " + sum.best.toFixed(1) : "") + "</span></div>" +
+    '<p class="small muted">Choose a skill, then choose a numbered set. Set numbers stay the same when you retake them, so you can compare your progress.</p>' +
     '<div class="pill-row">' + tabs + "</div></div>" +
     '<div class="grid g4" style="margin-top:16px">' + cat.map(setCardHTML).join("") + "</div>" +
-    '<div class="note" style="margin-top:16px"><span class="ic">ⓘ</span><div>Sets are drawn from the same bank, so a second set over the same material is a retake rather than new content. Scores are recorded in your attempt log like any other test and feed the same analytics.</div></div>';
+    '<div class="note" style="margin-top:16px"><span class="ic">â“˜</span><div>Your result and best score are saved on each set card.</div></div>';
 };
 
 /* ------------------------------- runner --------------------------------- */
@@ -348,9 +348,9 @@ function reviewHTML() {
   var unanswered = test.items.filter(function (i) { return !String(App.answers[i.id] || "").trim(); });
   var flagged = test.items.filter(function (i) { return App.flags[i.id]; });
   return '<div class="card tight" style="border-color:#f0c419;background:#fffdf5"><div class="row" style="justify-content:space-between">' +
-    '<div><b>Review before submitting</b><div class="small muted">Unanswered: ' + unanswered.length + " · Flagged: " + flagged.length + "</div></div>" +
+    '<div><b>Review before submitting</b><div class="small muted">Unanswered: ' + unanswered.length + " Â· Flagged: " + flagged.length + "</div></div>" +
     '<div class="row tight">' + common.btn("Submit now", "submit-test", "primary sm") + common.btn("Keep working", "toggle-review", "sm") + "</div></div>" +
-    (unanswered.length ? '<div class="small" style="margin-top:8px">Unanswered: ' + unanswered.slice(0, 12).map(function (i) { return "Q" + i.number; }).join(", ") + (unanswered.length > 12 ? "…" : "") + "</div>" : "") + "</div>";
+    (unanswered.length ? '<div class="small" style="margin-top:8px">Unanswered: ' + unanswered.slice(0, 12).map(function (i) { return "Q" + i.number; }).join(", ") + (unanswered.length > 12 ? "â€¦" : "") + "</div>" : "") + "</div>";
 }
 var common = {
   btn: function (label, act, cls, extra) { return '<button class="btn ' + (cls || "") + '" data-act="' + act + '" ' + (extra || "") + ">" + label + "</button>"; },
@@ -364,14 +364,14 @@ var common = {
       }).join("");
     }
     return '<div class="answerline"><input type="text" data-answer="' + it.id + '" value="' + esc(val || "") + '" placeholder="Type your answer">' +
-      common.btn(App.flags[it.id] ? "★ Flagged" : "☆ Flag", "flag", "sm", 'data-id="' + it.id + '"') + "</div>";
+      common.btn(App.flags[it.id] ? "â˜… Flagged" : "â˜† Flag", "flag", "sm", 'data-id="' + it.id + '"') + "</div>";
   },
   qcard: function (it, idx) {
     var val = App.answers[it.id] || "";
     return '<div class="qcard ' + (App.flags[it.id] ? "flagged " : "") + (App.qIndex === idx ? "current" : "") + '" data-q="' + idx + '" data-qid="' + it.id + '">' +
       '<div class="qhead"><span class="qnum">' + it.number + '</span><span class="chip grey">' + (TYPELABEL[it.type] || it.type) + '</span><span class="chip violet">' + esc(it.difficulty) + "</span>" +
       (it.wordLimit ? '<span class="chip amber">' + esc(it.wordLimit) + "</span>" : "") +
-      '<div class="spacer"></div>' + (itemOptions(it) ? common.btn(App.flags[it.id] ? "★" : "☆", "flag", "sm", 'data-id="' + it.id + '"') : "") + "</div>" +
+      '<div class="spacer"></div>' + (itemOptions(it) ? common.btn(App.flags[it.id] ? "â˜…" : "â˜†", "flag", "sm", 'data-id="' + it.id + '"') : "") + "</div>" +
       '<div class="qprompt">' + esc((it.options && it.options.length) ? it.prompt : promptStem(it.prompt)).replace(/\n/g, "<br>") + "</div>" + common.qinput(it, val) + "</div>";
   }
 };
@@ -384,19 +384,19 @@ Views.runner = function () {
   var ctxType = test.items[App.qIndex] ? test.items[App.qIndex].ctxType : "passage";
   var reader = "";
   if (ctxType === "passage") {
-    reader = '<div class="reader" id="reader"><h3>' + esc(ctx.title) + "</h3><div class=\"meta\">" + esc(ctx.subtitle || "") + " · " + ctx.wordCount + " words · " + esc(ctx.topic) + " · " + esc(ctx.difficulty) + ' · ~' + ctx.estimatedMinutes + " min</div>" +
+    reader = '<div class="reader" id="reader"><h3>' + esc(ctx.title) + "</h3><div class=\"meta\">" + esc(ctx.subtitle || "") + " Â· " + ctx.wordCount + " words Â· " + esc(ctx.topic) + " Â· " + esc(ctx.difficulty) + ' Â· ~' + ctx.estimatedMinutes + " min</div>" +
       '<div class="passage">' + ctx.text.map(function (p) { return "<p><span class=\"plabel\">" + p.label + "</span>" + esc(p.p) + "</p>"; }).join("") + "</div>" +
-      (ctx.technique ? '<div class="note" style="margin-top:14px"><span class="ic">✎</span><div><b>Technique:</b> ' + esc(ctx.technique.focus) + "</div></div>" : "") + "</div>";
+      (ctx.technique ? '<div class="note" style="margin-top:14px"><span class="ic">âœŽ</span><div><b>Technique:</b> ' + esc(ctx.technique.focus) + "</div></div>" : "") + "</div>";
   } else if (ctxType === "section") {
-    reader = '<div class="reader" id="reader"><h3>Section ' + ctx.number + " — " + esc(ctx.context) + "</h3>" +
-      '<div class="meta">' + esc(ctx.speakers.join(" · ")) + " · Accents: " + esc(ctx.accent.join(", ")) + " · " + esc(ctx.difficulty) + "</div>" +
-      '<div class="note"><span class="ic">🔊</span><div><b>Audio.</b> Use the controls below. In the real test you hear the recording once, so try to answer in a single pass. Transcripts stay locked until you submit.</div></div>' +
-      '<div class="row" style="margin:12px 0"><button class="btn primary" data-act="play" data-rate="1">▶ Play section</button>' +
-      '<button class="btn" data-act="play" data-rate="0.85">▶ Slower</button>' +
-      '<button class="btn" data-act="stop-audio">■ Stop</button>' +
+    reader = '<div class="reader" id="reader"><h3>Section ' + ctx.number + " â€” " + esc(ctx.context) + "</h3>" +
+      '<div class="meta">' + esc(ctx.speakers.join(" Â· ")) + " Â· Accents: " + esc(ctx.accent.join(", ")) + " Â· " + esc(ctx.difficulty) + "</div>" +
+      '<div class="note"><span class="ic">ðŸ”Š</span><div><b>Audio.</b> Use the controls below. In the real test you hear the recording once, so try to answer in a single pass. Transcripts stay locked until you submit.</div></div>' +
+      '<div class="row" style="margin:12px 0"><button class="btn primary" data-act="play" data-rate="1">â–¶ Play section</button>' +
+      '<button class="btn" data-act="play" data-rate="0.85">â–¶ Slower</button>' +
+      '<button class="btn" data-act="stop-audio">â–  Stop</button>' +
       '<span class="chip grey" id="audio-state">ready</span></div>' +
       '<div class="small muted">' + esc(ctx.notes) + "</div>" +
-      '<div class="note amber" style="margin-top:12px"><span class="ic">⚠</span><div id="speech-warn">If no sound plays, your browser has no speech synthesis voice installed. Use <b>“Reveal transcript”</b> in untimed mode to practise from the script — the questions and traps still work exactly the same way.</div></div>' +
+      '<div class="note amber" style="margin-top:12px"><span class="ic">âš </span><div id="speech-warn">If no sound plays, your browser has no speech synthesis voice installed. Use <b>â€œReveal transcriptâ€</b> in untimed mode to practise from the script â€” the questions and traps still work exactly the same way.</div></div>' +
       '<div class="row" style="margin-top:10px"><button class="btn sm" data-act="toggle-transcript-pre">' + (App.showTranscript ? "Hide transcript" : "Reveal transcript (practice mode)") + "</button></div>" +
       (App.showTranscript ? '<div style="margin-top:10px">' + ctx.transcript.map(function (l) { return '<div class="transcript-line"><div class="who">' + esc(l.sp) + "</div><div>" + esc(l.line) + "</div></div>"; }).join("") + "</div>" : "") + "</div>";
   }
@@ -412,18 +412,22 @@ Views.runner = function () {
     }
     grouped += common.qcard(it, i);
   });
-  var grid = '<div class="card tight"><div class="row" style="justify-content:space-between"><b class="small">Questions ' + (pageStart + 1) + "–" + Math.min(pageStart + 5, test.items.length) + ' of ' + test.items.length + '</b><span class="small muted">green = answered</span></div>' +
+  var grid = '<div class="card tight"><div class="row" style="justify-content:space-between"><b class="small">Question page ' + (Math.floor(pageStart / 5) + 1) + ' of ' + Math.ceil(test.items.length / 5) + '</b><span class="small muted">Questions ' + (pageStart + 1) + "â€“" + Math.min(pageStart + 5, test.items.length) + ' of ' + test.items.length + '</span></div>' +
     '<div class="qgrid" style="margin-top:8px">' + test.items.map(function (it, i) {
       var done = String(App.answers[it.id] || "").trim();
       return '<button class="' + (done ? "done " : "") + (App.flags[it.id] ? "flag " : "") + (App.qIndex === i ? "cur" : "") + '" data-act="jump" data-i="' + i + '">' + it.number + "</button>";
     }).join("") + "</div>" +
-    '<div class="row" style="margin-top:10px"><button class="btn sm" data-act="prev-page"' + (pageStart === 0 ? " disabled" : "") + '>← Previous 5</button><button class="btn sm" data-act="next-page"' + (pageStart + 5 >= test.items.length ? " disabled" : "") + '>Next 5 →</button>' +
-    (ctxType === "passage" ? '<button class="btn sm" data-act="scroll-reader">↑ Passage</button>' : "") + "</div>" +
-    '<div class="small muted kbd-hint" style="margin-top:8px">Keyboard: <span class="kbd">←</span> <span class="kbd">→</span> move · <span class="kbd">F</span> flag · <span class="kbd">Ctrl</span>+<span class="kbd">Enter</span> review</div></div>';
+    '<div class="row" style="margin-top:10px"><button class="btn sm" data-act="prev-page"' + (pageStart === 0 ? " disabled" : "") + '>â† Previous 5</button><button class="btn sm" data-act="next-page"' + (pageStart + 5 >= test.items.length ? " disabled" : "") + '>Next 5 â†’</button>' +
+    (ctxType === "passage" ? '<button class="btn sm" data-act="scroll-reader">â†‘ Passage</button>' : "") + "</div>" +
+     '<div class="note" style="margin-top:12px"><span class="ic">i</span><div>Use the passage or audio, answer the five questions, then choose <b>Next 5</b>. You can return to any question using the numbered buttons.</div></div>' +
+     '<div class="small muted kbd-hint" style="margin-top:8px">Tip: use the arrow keys to move between questions.</div></div>';
+
+
+
   /* On phones the passage pane and the questions pane become two tabs, so the
      student can flip between the text and the questions without endless scrolling. */
   var pane = App.pane || (window.innerWidth <= 900 ? "questions" : "passage");
-  var mobileToggle = '<div class="pane-toggle"><button class="' + (pane === "questions" ? "" : "primary") + '" data-act="toggle-pane" data-pane="passage">📖 ' + (ctxType === "passage" ? "Passage" : "Audio") + '</button><button class="' + (pane === "questions" ? "primary" : "") + '" data-act="toggle-pane" data-pane="questions">❓ Questions</button></div>';
+  var mobileToggle = '<div class="pane-toggle"><button class="' + (pane === "questions" ? "" : "primary") + '" data-act="toggle-pane" data-pane="passage">ðŸ“– ' + (ctxType === "passage" ? "Passage" : "Audio") + '</button><button class="' + (pane === "questions" ? "primary" : "") + '" data-act="toggle-pane" data-pane="questions">â“ Questions</button></div>';
   return noteHTML + timerbarHTML() + mobileToggle +
     '<div class="runner pane-' + pane + '">' + reader + '<div><div class="qwrap">' + grouped + "</div>" + grid + "</div></div>";
 };
@@ -451,7 +455,7 @@ var Listening = {
   },
   play: function (section, rate, onLine, onDone) {
     var self = this;
-    if (!this.available()) { toast("Speech synthesis is unavailable in this browser — use Reveal transcript."); if (onDone) onDone(); return; }
+    if (!this.available()) { toast("Speech synthesis is unavailable in this browser â€” use Reveal transcript."); if (onDone) onDone(); return; }
     this.stop();
     this.playing = true; this.cancelled = false;
     var i = 0;
@@ -545,7 +549,7 @@ Views.result = function () {
   var strong = r.breakdown.filter(function (b) { return b.correct / b.total >= 0.8; });
   var recs = Analytics.recommendedPractice(3);
   var b = Analytics.bands();
-  return setBannerHTML(test.setKey, { nextAct: "next-set", nextLabel: "Next set →" }) + '<div class="card"><div class="band-hero">' +
+  return setBannerHTML(test.setKey, { nextAct: "next-set", nextLabel: "Next set â†’" }) + '<div class="card"><div class="band-hero">' +
     '<div><div class="big">' + r.band.toFixed(1) + '</div><div class="lbl">Estimated IELTS Band</div><div class="small muted" style="margin-top:4px">' + esc(bandDescriptor(r.band)) + "</div></div>" +
     '<div style="flex:1;min-width:220px">' +
     '<div class="row" style="justify-content:space-between"><span>Raw score</span><b>' + r.raw + " / " + r.outOf + "</b></div>" +
@@ -555,16 +559,16 @@ Views.result = function () {
     '<div class="row" style="justify-content:space-between"><span>Mode</span><b>' + (test.timed ? "Timed" : "Untimed learning") + "</b></div>" +
     '<div class="row" style="justify-content:space-between"><span>Skill focus</span><b>' + esc(test.skill) + "</b></div>" +
     "</div></div>" +
-    '<div class="note amber" style="margin-top:14px"><span class="ic">ⓘ</span><div><b>Estimated band.</b> Raw marks were converted through the ' + (test.module === "general" && test.skill === "reading" ? "General Training" : "Academic") + ' conversion table' + (r.outOf < 40 ? " and scaled to a 40-mark equivalent, so this is a closer estimate than a full test would give" : "") + '. Writing and Speaking results on this platform are AI estimates, not official scores.</div></div></div>' +
+    '<div class="note amber" style="margin-top:14px"><span class="ic">â“˜</span><div><b>Estimated band.</b> Raw marks were converted through the ' + (test.module === "general" && test.skill === "reading" ? "General Training" : "Academic") + ' conversion table' + (r.outOf < 40 ? " and scaled to a 40-mark equivalent, so this is a closer estimate than a full test would give" : "") + '. Writing and Speaking results on this platform are AI estimates, not official scores.</div></div></div>' +
 
     '<div class="grid g2"><div class="card"><div class="card-h"><h3>Accuracy by question type</h3></div>' +
     r.breakdown.map(function (x) {
       var p = x.total ? x.correct / x.total : 0;
-      return '<div style="margin-bottom:11px"><div class="row" style="justify-content:space-between"><span class="small">' + esc(x.label) + '</span><span class="small b">' + x.correct + "/" + x.total + " · " + pct(p) + '%</span></div><div class="bar ' + (p < 0.6 ? "rose" : p < 0.8 ? "amber" : "teal") + '"><i style="width:' + Math.max(3, p * 100) + '%"></i></div></div>';
+      return '<div style="margin-bottom:11px"><div class="row" style="justify-content:space-between"><span class="small">' + esc(x.label) + '</span><span class="small b">' + x.correct + "/" + x.total + " Â· " + pct(p) + '%</span></div><div class="bar ' + (p < 0.6 ? "rose" : p < 0.8 ? "amber" : "teal") + '"><i style="width:' + Math.max(3, p * 100) + '%"></i></div></div>';
     }).join("") + "</div>" +
     '<div class="card"><div class="card-h"><h3>Diagnosis</h3></div>' +
-    (weak.length ? '<div class="upper">Weak areas</div><ul class="small">' + weak.map(function (w) { return "<li><b>" + esc(w.label) + "</b> — " + pct(w.correct / w.total) + "% (" + w.correct + "/" + w.total + ")</li>"; }).join("") + "</ul>" : '<div class="note green"><span class="ic">✓</span><div>No weak areas in this set — every question type was answered at 75% or above.</div></div>') +
-    (strong.length ? '<div class="upper" style="margin-top:10px">Strong areas</div><ul class="small">' + strong.map(function (w) { return "<li>" + esc(w.label) + " — " + pct(w.correct / w.total) + "%</li>"; }).join("") + "</ul>" : "") +
+    (weak.length ? '<div class="upper">Weak areas</div><ul class="small">' + weak.map(function (w) { return "<li><b>" + esc(w.label) + "</b> â€” " + pct(w.correct / w.total) + "% (" + w.correct + "/" + w.total + ")</li>"; }).join("") + "</ul>" : '<div class="note green"><span class="ic">âœ“</span><div>No weak areas in this set â€” every question type was answered at 75% or above.</div></div>') +
+    (strong.length ? '<div class="upper" style="margin-top:10px">Strong areas</div><ul class="small">' + strong.map(function (w) { return "<li>" + esc(w.label) + " â€” " + pct(w.correct / w.total) + "%</li>"; }).join("") + "</ul>" : "") +
     '<div class="upper" style="margin-top:10px">Recommended next practice</div>' +
     (recs.length ? recs.map(function (x) { return '<div class="small" style="padding:6px 0;border-bottom:1px dashed var(--line-2)"><b>' + esc(x.title) + "</b><br>" + esc(x.reason) + "</div>"; }).join("") : '<div class="small muted">Log more attempts for targeted recommendations.</div>') +
     '<div class="row" style="margin-top:12px"><button class="btn primary" data-act="start-weakness">Drill my weak types</button><button class="btn" data-act="retry-test">Retry this test</button><button class="btn" data-act="go" data-route="progress">Progress</button></div>' +
@@ -572,7 +576,7 @@ Views.result = function () {
 
     (Store.get().attempts.length >= 4 ? '<div class="card"><div class="card-h"><h3>Band trend</h3></div>' + sparkline(Analytics.trend(test.skill === "mixed" ? null : test.skill), { min: 4, max: 9 }) + "</div>" : "") +
 
-    '<div class="card"><div class="card-h"><h2>Question-by-question review</h2><div class="spacer"></div><span class="chip grey">' + r.detail.filter(function (d) { return d.correct; }).length + " correct · " + r.detail.filter(function (d) { return !d.answered; }).length + " unanswered</span></div>" +
+    '<div class="card"><div class="card-h"><h2>Question-by-question review</h2><div class="spacer"></div><span class="chip grey">' + r.detail.filter(function (d) { return d.correct; }).length + " correct Â· " + r.detail.filter(function (d) { return !d.answered; }).length + " unanswered</span></div>" +
     '<p class="small muted">Every item shows what was being tested, where the answer was, why it is correct, why your answer was wrong, the trap that caused the mistake, and how to recognise the pattern next time.</p>' +
     r.detail.map(function (d) { return explanationHTML(d); }).join("") + "</div>" +
 
@@ -601,7 +605,7 @@ function explanationHTML(d) {
       if (row[2] === "QUOTE") return '<div class="ex-row"><div class="ex-k">' + row[0] + '</div><div class="ex-v"><div class="quote">' + esc(ex.quote) + "</div></div></div>";
       return '<div class="ex-row"><div class="ex-k">' + row[0] + '</div><div class="ex-v">' + esc(row[1]) + "</div></div>";
     }).join("") +
-    ((it.vocab || []).length ? '<div class="ex-row"><div class="ex-k">Related vocabulary</div><div class="ex-v">' + it.vocab.map(function (v) { return "<b>" + esc(v[0]) + "</b> — " + esc(v[1]); }).join(" · ") + "</div></div>" : "") +
+    ((it.vocab || []).length ? '<div class="ex-row"><div class="ex-k">Related vocabulary</div><div class="ex-v">' + it.vocab.map(function (v) { return "<b>" + esc(v[0]) + "</b> â€” " + esc(v[1]); }).join(" Â· ") + "</div></div>" : "") +
     "</div>" +
     '<div class="row tight" style="margin-top:10px"><button class="btn sm" data-act="ask-about" data-q="Why is the answer to question ' + it.number + " \\\"" + esc(it.answer) + "\\\" and not what I wrote?\">Ask the tutor about this</button>" +
     '<span class="small muted">Skill tested: ' + esc(ex.test ? (ex.test.split(".")[0]) : "") + "</span></div></div>";
@@ -634,15 +638,15 @@ function transcriptReviewHTML(test, r) {
       var near = hitIdx.some(function (h) { return Math.abs(h - idx) <= 5; });
       if (near) dis[idx] = 1;
     });
-    out += '<div class="upper" style="margin:14px 0 6px">Section ' + sec.number + " — " + esc(sec.context) + "</div>";
+    out += '<div class="upper" style="margin:14px 0 6px">Section ' + sec.number + " â€” " + esc(sec.context) + "</div>";
     sec.transcript.forEach(function (l, idx) {
       var cls = hits[idx] ? "hit" : dis[idx] ? "dist" : "";
       out += '<div class="transcript-line ' + cls + '"><div class="who">' + esc(l.sp) + "</div><div>" + esc(l.line) +
         (hits[idx] ? '<span class="tag ans">answer Q' + hits[idx].join(", ") + "</span>" : "") +
         (dis[idx] ? '<span class="tag dis">distractor signal: a fact withdrawn or corrected</span>' : "") + "</div></div>";
     });
-    out += '<div class="small muted" style="margin:8px 0 4px">Highlighting is generated by matching each answer key to the script, so you can see the exact words the speaker used — and how close the distractors sat.</div>';
+    out += '<div class="small muted" style="margin:8px 0 4px">Highlighting is generated by matching each answer key to the script, so you can see the exact words the speaker used â€” and how close the distractors sat.</div>';
   });
-  out += '<div class="legend" style="margin-top:10px"><span><i style="background:#fff8dc;border:1px solid #f2e0a8"></i>answer location</span><span><i style="background:#fdf2f5;border:1px solid #f6d7e0"></i>distractor signal — a fact the speaker withdrew or corrected</span><span>Spelling and word limits are part of the mark — check your answer against the exact script wording.</span></div>';
+  out += '<div class="legend" style="margin-top:10px"><span><i style="background:#fff8dc;border:1px solid #f2e0a8"></i>answer location</span><span><i style="background:#fdf2f5;border:1px solid #f6d7e0"></i>distractor signal â€” a fact the speaker withdrew or corrected</span><span>Spelling and word limits are part of the mark â€” check your answer against the exact script wording.</span></div>';
   return out;
 }
