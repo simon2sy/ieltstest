@@ -19,6 +19,101 @@
 var PracticeSets = (function () {
   var PER_SKILL = 30;
 
+  /* ---- part taxonomy ---------------------------------------------------
+     The real test is not four undifferentiated blocks. Each part has a
+     different shape — how many speakers, who is talking to whom, and what
+     kind of question it throws at you. Sets are grouped by part so a
+     student can drill one format at a time, and the catalogue can say what
+     they are about to hear before they press play. */
+  var PART_META = {
+    listening: [
+      { key: 1, label: "Part 1", name: "Everyday conversation", speakers: "Two speakers",
+        desc: "A transaction in an everyday setting — a booking, an enquiry, a repair call. Facts are dictated once: names, spellings, dates, times and prices.",
+        tip: "Predict the gaps before you play. Look at the nouns and numbers already on the form, and hold your pen until the matching word is spoken." },
+      { key: 2, label: "Part 2", name: "Monologue", speakers: "One speaker",
+        desc: "A single speaker addressing a general audience — a tour guide, a briefing, an announcement. Nobody is asking questions and there is no interaction.",
+        tip: "Use the question order as a map of the talk. A monologue never jumps back, so if you miss one gap, mark it and keep writing." },
+      { key: 3, label: "Part 3", name: "Academic discussion", speakers: "Two or three speakers",
+        desc: "A tutor and students, or a panel, negotiating a plan. Answers are agreed rather than announced, and the first thing said is often the thing that gets changed.",
+        tip: "Track who holds the power. The person who evaluates or redirects a proposal is usually carrying the answer." },
+      { key: 4, label: "Part 4", name: "Academic lecture", speakers: "One speaker",
+        desc: "A continuous lecture on an academic subject, with no signposting from a questioner. Vocabulary is technical and the pace does not let up.",
+        tip: "Follow the lecture's own order. Write key words for the argument as it develops, and never go back — there is no second chance in this part." }
+    ],
+    reading: [
+      { key: 1, label: "Passage 1", name: "First passage", speakers: "",
+        desc: "The opening passage of the paper. In the Academic module it is usually the most accessible of the three.",
+        tip: "Read the question first, then scan for the paraphrase rather than hunting for the exact words. Spend the least time here and bank the marks." },
+      { key: 2, label: "Passage 2", name: "Second passage", speakers: "",
+        desc: "The middle passage — typically the main argument of the topic, and usually denser than the first.",
+        tip: "This is where the main idea lives. Read the introduction and the last paragraph closely; they frame everything between them." },
+      { key: 3, label: "Passage 3", name: "Third passage", speakers: "",
+        desc: "The final passage, and in Academic the hardest: abstract argument, heavy terminology, and question types such as headings matching that never appear earlier.",
+        tip: "Build the structure before the detail. If you can write the shape of each paragraph in four words, the matching questions answer themselves." }
+    ],
+    writing: [
+      { key: 1, label: "Task 1", name: "Task 1 only", speakers: "",
+        desc: "A single Task 1: an Academic chart, process or map, or a General Training letter. Report the data, do not give an opinion.",
+        tip: "Write an overview — the single most important sentence group in Task 1. Then group the data by feature, not one sentence per bar." },
+      { key: 2, label: "Task 2", name: "Task 2 only", speakers: "",
+        desc: "A single essay in one of the seven common types: opinion, discussion, problem-solution, advantages-disadvantages, two-part, causes-problems, or past-present-future.",
+        tip: "Your position comes first. Two clear body paragraphs that each do one job will always beat four that each do half of four." },
+      { key: 3, label: "Full paper", name: "Task 1 + Task 2", speakers: "",
+        desc: "A complete 60-minute paper with both tasks under exam timing — the only way to practise the split the examiner actually expects.",
+        tip: "Leave twenty minutes for Task 2. Most candidates overrun Task 1 and lose coherence under time pressure on the essay." }
+    ],
+    speaking: [
+      { key: 1, label: "Part 1", name: "Interview", speakers: "Examiner + you",
+        desc: "Four or five short questions on familiar topics, with follow-ups. This part scores fluency and ease rather than accuracy under pressure.",
+        tip: "Answer in two or three sentences and add a reason. One-sentence answers are what pull a score down to Band 5." },
+      { key: 2, label: "Part 2", name: "Long turn", speakers: "You alone",
+        desc: "One cue card: one minute of preparation, then one to two minutes of uninterrupted talk, then a one-minute follow-up question.",
+        tip: "Use the whole preparation minute to make four quick notes. The examiner is scoring structure, not the content you happened to think of." },
+      { key: 3, label: "Part 3", name: "Two-way discussion", speakers: "Examiner + you",
+        desc: "Abstract questions that extend the Part 2 topic, with the examiner pushing back and developing your view.",
+        tip: "Give a reason, a comparison and an example. This is where range and flexibility separate Band 6 from Band 8." }
+    ]
+  };
+
+  /* Which set numbers belong to which part. Written out explicitly rather
+     than computed so that adding a part or renumbering never silently
+     reshuffles every set a student has already scored. */
+  var PART_PLAN = {
+    reading: [[1, 10], [2, 10], [3, 10]],
+    listening: [[1, 8], [2, 8], [3, 8], [4, 6]],
+    writing: [[1, 8], [2, 8], [3, 14]],
+    speaking: [[1, 12], [2, 9], [3, 9]]
+  };
+  var planCache = {};
+  /** [{ n: 1, part: 1 }, …] — deterministic, cached per skill. */
+  function planFor(skill) {
+    if (planCache[skill]) return planCache[skill];
+    var blocks = PART_PLAN[skill] || [];
+    var out = [];
+    blocks.forEach(function (b) {
+      for (var i = 0; i < b[1]; i++) out.push({ n: out.length + 1, part: b[0] });
+    });
+    var last = blocks.length ? blocks[blocks.length - 1][0] : 1;
+    while (out.length < PER_SKILL) out.push({ n: out.length + 1, part: last });
+    return (planCache[skill] = out.slice(0, PER_SKILL));
+  }
+  /** The part a given set number belongs to. */
+  function partForSet(skill, n) {
+    var plan = planFor(skill);
+    var row = plan[n - 1];
+    return row ? row.part : (plan.length ? plan[plan.length - 1].part : 1);
+  }
+  /** Set numbers belonging to a part, in order. */
+  function setsForPart(skill, part) {
+    return planFor(skill).filter(function (r) { return r.part === part; }).map(function (r) { return r.n; });
+  }
+  /** Metadata for one part, or null if the skill has no such part. */
+  function partMeta(skill, part) {
+    var list = PART_META[skill] || [];
+    for (var i = 0; i < list.length; i++) if (list[i].key === part) return list[i];
+    return null;
+  }
+
   /* ---- deterministic helpers (same set number → same questions) ---- */
   function hash(str) {
     var h = 2166136261, i;
