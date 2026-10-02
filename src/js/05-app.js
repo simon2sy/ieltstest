@@ -215,7 +215,9 @@ var ACTIONS = {
   "play": function (el) {
     var test = App.test, idx = App.qIndex, item = test.items[idx] || test.items[0];
     var sec = item.ctx;
-    Listening.play(sec, parseFloat(el.dataset.rate || "1"));
+    var rate = el.dataset.rate;
+    var parsed = rate != null && rate !== "" ? parseFloat(rate) : null;
+    Listening.play(sec, parsed);
   },
   "stop-audio": function () { Listening.stop(); },
   "submit-test": function () { App.submitTest(); },

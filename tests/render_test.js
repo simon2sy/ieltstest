@@ -7,7 +7,7 @@
 const fs = require("fs"), path = require("path"), vm = require("vm");
 const ROOT = path.join(__dirname, "..");
 const DATA = ["reading-academic-1.js", "reading-academic-2.js", "reading-academic-3.js", "reading-gt.js", "reading-gt-2.js",
-  "listening-1.js", "listening-2.js", "writing-t1.js", "writing-2.js", "speaking.js", "vocab.js", "grammar.js"];
+  "listening-1.js", "listening-2.js", "listening-3.js", "writing-t1.js", "writing-2.js", "speaking.js", "vocab.js", "grammar.js"];
 const JS = ["01-core.js", "06-sets.js", "02-eval.js", "03-views-a.js", "04-views-b.js"];
 const APP_JS = "05-app.js";
 
@@ -101,7 +101,8 @@ ok(/Question page 1/.test(runnerHTML) && /Next 5/.test(runnerHTML), "runner show
 
 App.qIndex = test.items.findIndex(i => i.skill === "listening");
 const runnerL = render(() => Views.runner(), "runner with listening section pane (audio controls)");
-ok(/Play section/.test(runnerL), "audio playback controls rendered for listening sections");
+ok(/data-act="play"/.test(runnerL) && /Play Part \d/.test(runnerL), "audio playback controls rendered for listening sections (play button labelled with the part)");
+ok(/data-act="stop-audio"/.test(runnerL) && /audio-state/.test(runnerL), "stop control and audio status chip present in the listening pane");
 
 /* answer everything correctly, then mark a couple wrong to exercise explanations */
 test.items.forEach((it, i) => { App.answers[it.id] = i % 7 === 0 ? "definitely wrong" : it.answer; });

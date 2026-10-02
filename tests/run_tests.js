@@ -14,7 +14,7 @@ const vm = require("vm");
 
 const ROOT = path.join(__dirname, "..");
 const DATA = ["reading-academic-1.js", "reading-academic-2.js", "reading-academic-3.js", "reading-gt.js", "reading-gt-2.js",
-  "listening-1.js", "listening-2.js", "writing-t1.js", "writing-2.js", "speaking.js", "vocab.js", "grammar.js"];
+  "listening-1.js", "listening-2.js", "listening-3.js", "writing-t1.js", "writing-2.js", "speaking.js", "vocab.js", "grammar.js"];
 const JS = ["01-core.js", "06-sets.js", "02-eval.js"];
 
 /* ---- minimal DOM / browser stubs ---- */
@@ -208,7 +208,8 @@ ok(levels.some(l => /Band 5/.test(l)) && levels.some(l => /Band 7(\.5)?/.test(l)
 console.log("\n[8] Listening bank structure and mock variety");
 const ltests = window.BANK_LISTENING.tests;
 const lsecs = window.BANK_LISTENING.sections;
-ok(ltests.length >= 2, "two complete listening tests are available (" + ltests.length + ")");
+ok(ltests.length >= 3, "three complete listening tests are available (" + ltests.length + ")");
+ok(new Set(ltests.map(t => t.id)).size === ltests.length, "listening test ids are unique");
 ltests.forEach(t => {
   const secs = lsecs.filter(s => s.testId === t.id).sort((a, b) => a.number - b.number);
   ok(secs.length === 4, t.id + " has four sections (" + secs.length + ")");

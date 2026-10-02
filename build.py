@@ -15,7 +15,7 @@ OUT = os.path.join(ROOT, "ielts-platform.html")
 
 DATA_ORDER = [
     "reading-academic-1.js", "reading-academic-2.js", "reading-academic-3.js",
-    "reading-gt.js", "reading-gt-2.js", "listening-1.js", "listening-2.js",
+    "reading-gt.js", "reading-gt-2.js", "listening-1.js", "listening-2.js", "listening-3.js",
     "writing-t1.js", "writing-2.js", "speaking.js", "vocab.js", "grammar.js",
 ]
 JS_ORDER = ["01-core.js", "06-sets.js", "02-eval.js", "03-views-a.js", "04-views-b.js", "05-app.js"]

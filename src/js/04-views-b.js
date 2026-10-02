@@ -50,7 +50,7 @@ Views.listening = function () {
     '<div class="card tight"><div class="stat"><div class="k">Accents</div><div class="v">' + Object.keys(groupBy(([]).concat.apply([], secs.map(function (s) { return s.accent; })), function (x) { return x; })).length + '</div><div class="d">British · Scottish · American · Australian · Indian English</div></div></div></div>' +
 
     '<div class="card"><div class="card-h"><h2>Full listening test</h2><div class="spacer"></div><span class="chip">4 sections · 40 questions · ~30 min</span></div>' +
-    '<p class="small muted">Sections follow the real test pattern: Section 1 a transactional conversation, Section 2 a monologue for a general audience, Section 3 an academic tutorial, Section 4 an academic lecture. Each section is spoken with speech synthesis, with different voices for different speakers.</p>' +
+    '<p class="small muted">Parts follow the real test pattern: Part 1 a transactional conversation, Part 2 a monologue for a general audience, Part 3 an academic tutorial, Part 4 an academic lecture. Each part is spoken with speech synthesis, with different voices for different speakers.</p>' +
     '<div class="note amber"><span class="ic">🔊</span><div>Audio uses your browser\'s built-in speech voices. If none is installed, use <b>untimed mode → reveal transcript</b>: the questions, traps and explanations are identical.</div></div>' +
     '<div class="row" style="margin-top:12px"><button class="btn primary" data-act="start-listening-full">Start 40-question test</button>' +
     '<button class="btn" data-act="start-listening-full" data-timed="0">Untimed (transcript allowed)</button>' +
@@ -58,7 +58,7 @@ Views.listening = function () {
 
     '<div class="grid g2"><div class="card"><div class="card-h"><h3>Practise one section</h3></div>' +
     secs.map(function (s) {
-      return '<div class="row" style="justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--line-2)"><div><div class="b">Section ' + s.number + " — " + esc(s.context.slice(0, 58)) + (s.context.length > 58 ? "…" : "") + '</div><div class="small muted">' + esc(s.accent.join(", ")) + " · " + s.questions.length + " questions · " + esc(s.band) + '</div></div><button class="btn sm" data-act="start-section" data-id="' + s.id + '">Play & answer</button></div>';
+      return '<div class="row" style="justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--line-2)"><div><div class="b">' + Listening.partLabel(s) + " — " + esc(s.context.slice(0, 58)) + (s.context.length > 58 ? "…" : "") + '</div><div class="small muted">' + esc(s.accent.join(", ")) + " · " + s.questions.length + " questions · " + esc(s.band) + '</div></div><button class="btn sm" data-act="start-section" data-id="' + s.id + '">Play & answer</button></div>';
     }).join("") + "</div>" +
     '<div class="card"><div class="card-h"><h3>Question types & technique</h3></div>' +
     '<div class="pill-row">' + typesL.map(function (t) { return '<button class="btn sm" data-act="quick-start" data-skill="listening" data-types="' + t.type + '" data-count="20">' + t.label + "</button>"; }).join("") + "</div>" +

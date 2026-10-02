@@ -21,7 +21,7 @@ bank and the styles are inlined.
 |---|---|
 | **Reading — Academic** | 3 passages (13 + 13 + 14 = 40 questions) across parts 1–3, bands 6.0–8.0 |
 | **Reading — General Training** | 3 passages (13 + 13 + 14 = 40 questions), bands 5.0–7.5 |
-| **Listening** | 2 complete tests, 4 sections each (80 questions), full transcripts, timings and voices |
+| **Listening** | 3 complete tests, 4 sections each (120 questions), full transcripts, timings and voices |
 | **Writing** | 16 tasks: 7 Academic Task 1 visual types (line, bar, pie, table, process, map, multiple), GT Task 1 formal / semi-formal / informal, and 7 Task 2 essay types — band 6/7/8/9 samples on six of them |
 | **Speaking** | 12 topic sets: Part 1 questions, Part 2 cue cards with bullets and follow-up, Part 3 discussions, useful language, examiner warnings |
 | **Vocabulary** | 60 academic entries with collocations, IELTS example sentences and a spaced-repetition queue (4 grades, 1/3/7/14-day intervals) |
@@ -90,8 +90,8 @@ bash tests/run_all.sh   # build + verify
 ## Known limits (stated rather than hidden)
 
 * One Academic reading paper and one GT reading paper exist, so a *second* full reading mock
-  reuses passages; the listening bank already supports two repeat-free mocks because it holds
-  two complete tests. Adding a second reading paper is a content task, not a code change.
+  reuses passages; the listening bank now supports three repeat-free mocks because it holds
+  three complete tests. Adding a second reading paper is a content task, not a code change.
 * The 20 practice sets per skill are drawn from that same bank, so different set numbers vary the
   anchor passage/section and the questions taken from it, but two sets over the same passage are
   not wholly new material. The sets are built so a retake of the *same* set is reproducible, which

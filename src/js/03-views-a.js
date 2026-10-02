@@ -388,11 +388,11 @@ Views.runner = function () {
       '<div class="passage">' + ctx.text.map(function (p) { return "<p><span class=\"plabel\">" + p.label + "</span>" + esc(p.p) + "</p>"; }).join("") + "</div>" +
       (ctx.technique ? '<div class="note" style="margin-top:14px"><span class="ic">âœŽ</span><div><b>Technique:</b> ' + esc(ctx.technique.focus) + "</div></div>" : "") + "</div>";
   } else if (ctxType === "section") {
-    reader = '<div class="reader" id="reader"><h3>Section ' + ctx.number + " â€” " + esc(ctx.context) + "</h3>" +
+    reader = '<div class="reader" id="reader"><h3>' + Listening.partLabel(ctx) + " â€” " + esc(ctx.context) + "</h3>" +
       '<div class="meta">' + esc(ctx.speakers.join(" Â· ")) + " Â· Accents: " + esc(ctx.accent.join(", ")) + " Â· " + esc(ctx.difficulty) + "</div>" +
-      '<div class="note"><span class="ic">ðŸ”Š</span><div><b>Audio.</b> Use the controls below. In the real test you hear the recording once, so try to answer in a single pass. Transcripts stay locked until you submit.</div></div>' +
-      '<div class="row" style="margin:12px 0"><button class="btn primary" data-act="play" data-rate="1">â–¶ Play section</button>' +
-      '<button class="btn" data-act="play" data-rate="0.85">â–¶ Slower</button>' +
+      '<div class="note"><span class="ic">ðŸ”Š</span><div><b>Audio.</b> This follows a real IELTS pace: Part 1 is the clearest and slowest, then the pace rises through Parts 2â€“4. Use one pass for answers and keep the transcript hidden until you submit.</div></div>' +
+      '<div class="row" style="margin:12px 0"><button class="btn primary" data-act="play">â–¶ Play ' + Listening.partLabel(ctx) + '</button>' +
+      '<button class="btn" data-act="play" data-rate="0.72">â–¶ Slow</button>' +
       '<button class="btn" data-act="stop-audio">â–  Stop</button>' +
       '<span class="chip grey" id="audio-state">ready</span></div>' +
       '<div class="small muted">' + esc(ctx.notes) + "</div>" +
@@ -406,7 +406,7 @@ Views.runner = function () {
   pageItems.forEach(function (it) {
     var i = test.items.indexOf(it);
     if (it.ctxId !== lastCtx) {
-      var c = it.ctxType === "passage" ? "Passage: " + it.ctx.title : "Section " + it.ctx.number + ": " + it.ctx.context;
+      var c = it.ctxType === "passage" ? "Passage: " + it.ctx.title : Listening.partLabel(it.ctx) + ": " + it.ctx.context;
       grouped += '<div class="upper" style="margin:14px 0 6px">' + esc(c) + "</div>";
       lastCtx = it.ctxId;
     }
@@ -435,6 +435,16 @@ Views.runner = function () {
 /* ---------------------------- listening audio --------------------------- */
 var Listening = {
   playing: false, cancelled: false, voices: [],
+  partLabel: function (section) {
+    var n = Number(section && (section.part || section.number) || 1);
+    return "Part " + n;
+  },
+  rateFor: function (section, rate) {
+    if (rate != null && !Number.isNaN(rate)) return rate;
+    var n = Number(section && (section.part || section.number) || 1);
+    var map = { 1: 0.82, 2: 0.79, 3: 0.76, 4: 0.73 };
+    return map[n] || 0.8;
+  },
   loadVoices: function () {
     if (!window.speechSynthesis) return;
     this.voices = window.speechSynthesis.getVoices() || [];
@@ -470,7 +480,7 @@ var Listening = {
       var u = new SpeechSynthesisUtterance(line.line);
       var v = self.pick(section.accent.join(","), line.sp);
       if (v) u.voice = v;
-      u.rate = rate || 1;
+      u.rate = self.rateFor(section, rate);
       u.pitch = /female|caller|priya|receptionist|presenter|tutor|anna/i.test(line.sp) ? 1.06 : 0.92;
       u.onend = function () { if (onLine) onLine(i); i++; setTimeout(next, 260); };
       u.onerror = function () { i++; setTimeout(next, 200); };
@@ -638,7 +648,7 @@ function transcriptReviewHTML(test, r) {
       var near = hitIdx.some(function (h) { return Math.abs(h - idx) <= 5; });
       if (near) dis[idx] = 1;
     });
-    out += '<div class="upper" style="margin:14px 0 6px">Section ' + sec.number + " â€” " + esc(sec.context) + "</div>";
+    out += '<div class="upper" style="margin:14px 0 6px">' + Listening.partLabel(sec) + " — " + esc(sec.context) + "</div>";
     sec.transcript.forEach(function (l, idx) {
       var cls = hits[idx] ? "hit" : dis[idx] ? "dist" : "";
       out += '<div class="transcript-line ' + cls + '"><div class="who">' + esc(l.sp) + "</div><div>" + esc(l.line) +
